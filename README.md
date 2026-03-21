@@ -9,6 +9,12 @@ It supports two end-to-end pipelines:
 
 This repository focuses on the algorithmic part of the system: parsing, intermediate representation design, topology recognition, and layout-aware rendering heuristics.
 
+## Preview
+
+Initial rendering result generated from `examples/1.cir`:
+
+![SPICE2SVG preview](docs/images/overview_1.svg)
+
 ## Overview
 
 SPICE netlists are compact and simulation-friendly, but they are difficult to read as diagrams. SPICE2SVG reconstructs enough structure from raw netlists to generate readable schematics automatically.
