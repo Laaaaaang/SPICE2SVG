@@ -1,0 +1,130 @@
+{
+  "modules": {
+    "": {
+      "cells": {
+        "RB": {
+          "type": "r_v",
+          "attributes": {
+            "value": "100k",
+            "ref": "RB"
+          },
+          "connections": {
+            "A": [
+              2
+            ],
+            "B": [
+              3
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "vcc_1": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              6
+            ]
+          },
+          "attributes": {
+            "name": "VCC"
+          }
+        },
+        "RC": {
+          "type": "r_v",
+          "attributes": {
+            "value": "4.7k",
+            "ref": "RC"
+          },
+          "connections": {
+            "A": [
+              6
+            ],
+            "B": [
+              4
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_2": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              7
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "RE": {
+          "type": "r_v",
+          "attributes": {
+            "value": "1k",
+            "ref": "RE"
+          },
+          "connections": {
+            "A": [
+              5
+            ],
+            "B": [
+              7
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "Q1": {
+          "type": "q_npn",
+          "attributes": {
+            "value": "2N2222",
+            "ref": "Q1"
+          },
+          "connections": {
+            "C": [
+              4
+            ],
+            "B": [
+              3
+            ],
+            "E": [
+              5
+            ]
+          },
+          "port_directions": {
+            "C": "input",
+            "B": "input",
+            "E": "output"
+          }
+        }
+      },
+      "ports": {
+        "VIN": {
+          "bits": [
+            2
+          ],
+          "direction": "input"
+        },
+        "VOUT": {
+          "bits": [
+            4
+          ],
+          "direction": "output"
+        }
+      }
+    }
+  }
+}

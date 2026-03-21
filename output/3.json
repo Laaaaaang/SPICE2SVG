@@ -1,0 +1,1508 @@
+{
+  "modules": {
+    "": {
+      "cells": {
+        "vcc_1": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              35
+            ]
+          },
+          "attributes": {
+            "name": "VCC"
+          }
+        },
+        "gnd_2": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              36
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CDEC_P": {
+          "type": "c_v",
+          "attributes": {
+            "value": "2200u",
+            "ref": "CDEC_P"
+          },
+          "connections": {
+            "A": [
+              35
+            ],
+            "B": [
+              36
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "vee_3": {
+          "type": "vee",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              37
+            ]
+          },
+          "attributes": {
+            "name": "VEE"
+          }
+        },
+        "gnd_4": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              38
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CDEC_N": {
+          "type": "c_v",
+          "attributes": {
+            "value": "2200u",
+            "ref": "CDEC_N"
+          },
+          "connections": {
+            "A": [
+              37
+            ],
+            "B": [
+              38
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_5": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              39
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "VIN": {
+          "type": "v",
+          "attributes": {
+            "value": "1",
+            "ref": "VIN"
+          },
+          "connections": {
+            "+": [
+              2
+            ],
+            "-": [
+              39
+            ]
+          },
+          "port_directions": {
+            "+": "input",
+            "-": "output"
+          }
+        },
+        "RIN": {
+          "type": "r_v",
+          "attributes": {
+            "value": "2k",
+            "ref": "RIN"
+          },
+          "connections": {
+            "A": [
+              2
+            ],
+            "B": [
+              3
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_6": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              40
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CINRF": {
+          "type": "c_v",
+          "attributes": {
+            "value": "100p",
+            "ref": "CINRF"
+          },
+          "connections": {
+            "A": [
+              3
+            ],
+            "B": [
+              40
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_7": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              41
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "RINB": {
+          "type": "r_v",
+          "attributes": {
+            "value": "270k",
+            "ref": "RINB"
+          },
+          "connections": {
+            "A": [
+              3
+            ],
+            "B": [
+              41
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "RFB": {
+          "type": "r_v",
+          "attributes": {
+            "value": "22k",
+            "ref": "RFB"
+          },
+          "connections": {
+            "A": [
+              4
+            ],
+            "B": [
+              5
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_8": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              42
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "RFBG": {
+          "type": "r_v",
+          "attributes": {
+            "value": "1k",
+            "ref": "RFBG"
+          },
+          "connections": {
+            "A": [
+              5
+            ],
+            "B": [
+              42
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "JINP": {
+          "type": "nmos_ml",
+          "attributes": {
+            "value": "NJF_IN",
+            "ref": "JINP"
+          },
+          "connections": {
+            "D": [
+              6
+            ],
+            "G": [
+              3
+            ],
+            "S": [
+              7
+            ]
+          },
+          "port_directions": {
+            "D": "input",
+            "G": "input",
+            "S": "output"
+          }
+        },
+        "JINN": {
+          "type": "nmos_m",
+          "attributes": {
+            "value": "NJF_IN",
+            "ref": "JINN"
+          },
+          "connections": {
+            "D": [
+              8
+            ],
+            "G": [
+              5
+            ],
+            "S": [
+              7
+            ]
+          },
+          "port_directions": {
+            "D": "input",
+            "G": "input",
+            "S": "output"
+          }
+        },
+        "vee_9": {
+          "type": "vee",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              43
+            ]
+          },
+          "attributes": {
+            "name": "VEE"
+          }
+        },
+        "ITAIL": {
+          "type": "i",
+          "attributes": {
+            "value": "8m",
+            "ref": "ITAIL"
+          },
+          "connections": {
+            "+": [
+              7
+            ],
+            "-": [
+              43
+            ]
+          },
+          "port_directions": {
+            "+": "input",
+            "-": "output"
+          }
+        },
+        "vcc_10": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              44
+            ]
+          },
+          "attributes": {
+            "name": "VCC"
+          }
+        },
+        "vcc_11": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              45
+            ]
+          },
+          "attributes": {
+            "name": "VCC"
+          }
+        },
+        "QML1": {
+          "type": "q_pnp_ml",
+          "attributes": {
+            "value": "PNP_SMALL",
+            "ref": "QML1"
+          },
+          "connections": {
+            "C": [
+              6
+            ],
+            "B": [
+              6
+            ],
+            "E": [
+              44
+            ]
+          },
+          "port_directions": {
+            "C": "output",
+            "B": "output",
+            "E": "input"
+          }
+        },
+        "QML2": {
+          "type": "q_pnp_m",
+          "attributes": {
+            "value": "PNP_SMALL",
+            "ref": "QML2"
+          },
+          "connections": {
+            "C": [
+              9
+            ],
+            "B": [
+              6
+            ],
+            "E": [
+              45
+            ]
+          },
+          "port_directions": {
+            "C": "output",
+            "B": "output",
+            "E": "input"
+          }
+        },
+        "gnd_12": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              46
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "RERR": {
+          "type": "r_v",
+          "attributes": {
+            "value": "100k",
+            "ref": "RERR"
+          },
+          "connections": {
+            "A": [
+              9
+            ],
+            "B": [
+              46
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "XSERVO": {
+          "type": "x",
+          "attributes": {
+            "value": "OPAMP_SIMPLE",
+            "ref": "XSERVO"
+          },
+          "connections": {},
+          "port_directions": {}
+        },
+        "RSRV": {
+          "type": "r_v",
+          "attributes": {
+            "value": "330k",
+            "ref": "RSRV"
+          },
+          "connections": {
+            "A": [
+              10
+            ],
+            "B": [
+              5
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "CSRV": {
+          "type": "c_v",
+          "attributes": {
+            "value": "2.2u",
+            "ref": "CSRV"
+          },
+          "connections": {
+            "A": [
+              10
+            ],
+            "B": [
+              4
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "vee_13": {
+          "type": "vee",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              47
+            ]
+          },
+          "attributes": {
+            "name": "VEE"
+          }
+        },
+        "QVAS": {
+          "type": "q_npn",
+          "attributes": {
+            "value": "NPN_VAS",
+            "ref": "QVAS"
+          },
+          "connections": {
+            "C": [
+              11
+            ],
+            "B": [
+              9
+            ],
+            "E": [
+              47
+            ]
+          },
+          "port_directions": {
+            "C": "input",
+            "B": "input",
+            "E": "output"
+          }
+        },
+        "vcc_14": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              48
+            ]
+          },
+          "attributes": {
+            "name": "VCC"
+          }
+        },
+        "IVAS": {
+          "type": "i",
+          "attributes": {
+            "value": "10m",
+            "ref": "IVAS"
+          },
+          "connections": {
+            "+": [
+              48
+            ],
+            "-": [
+              11
+            ]
+          },
+          "port_directions": {
+            "+": "input",
+            "-": "output"
+          }
+        },
+        "CCOMP": {
+          "type": "c_v",
+          "attributes": {
+            "value": "100p",
+            "ref": "CCOMP"
+          },
+          "connections": {
+            "A": [
+              11
+            ],
+            "B": [
+              9
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "RSTOP": {
+          "type": "r_v",
+          "attributes": {
+            "value": "100",
+            "ref": "RSTOP"
+          },
+          "connections": {
+            "A": [
+              11
+            ],
+            "B": [
+              12
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_15": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              49
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "BUPSRC": {
+          "type": "v",
+          "attributes": {
+            "value": "V = { V(VAS) + 1.25 }",
+            "ref": "BUPSRC"
+          },
+          "connections": {
+            "+": [
+              13
+            ],
+            "-": [
+              49
+            ]
+          },
+          "port_directions": {
+            "+": "input",
+            "-": "output"
+          }
+        },
+        "gnd_16": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              50
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "BDNSRC": {
+          "type": "v",
+          "attributes": {
+            "value": "V = { V(VAS) - 1.25 }",
+            "ref": "BDNSRC"
+          },
+          "connections": {
+            "+": [
+              14
+            ],
+            "-": [
+              50
+            ]
+          },
+          "port_directions": {
+            "+": "input",
+            "-": "output"
+          }
+        },
+        "vcc_17": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              51
+            ]
+          },
+          "attributes": {
+            "name": "VCC"
+          }
+        },
+        "QDRVU": {
+          "type": "q_npn",
+          "attributes": {
+            "value": "NPN_DRV",
+            "ref": "QDRVU"
+          },
+          "connections": {
+            "C": [
+              51
+            ],
+            "B": [
+              13
+            ],
+            "E": [
+              15
+            ]
+          },
+          "port_directions": {
+            "C": "input",
+            "B": "input",
+            "E": "output"
+          }
+        },
+        "QDRVD": {
+          "type": "q_pnp",
+          "attributes": {
+            "value": "PNP_DRV",
+            "ref": "QDRVD"
+          },
+          "connections": {
+            "C": [
+              52
+            ],
+            "B": [
+              14
+            ],
+            "E": [
+              16
+            ]
+          },
+          "port_directions": {
+            "C": "output",
+            "B": "input",
+            "E": "output"
+          }
+        },
+        "vee_18": {
+          "type": "vee",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              52
+            ]
+          },
+          "attributes": {
+            "name": "VEE"
+          }
+        },
+        "RBPU1": {
+          "type": "r_v",
+          "attributes": {
+            "value": "100",
+            "ref": "RBPU1"
+          },
+          "connections": {
+            "A": [
+              15
+            ],
+            "B": [
+              17
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "vcc_19": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              53
+            ]
+          },
+          "attributes": {
+            "name": "VCC"
+          }
+        },
+        "QOP1": {
+          "type": "q_npn",
+          "attributes": {
+            "value": "NPN_PWR",
+            "ref": "QOP1"
+          },
+          "connections": {
+            "C": [
+              53
+            ],
+            "B": [
+              17
+            ],
+            "E": [
+              18
+            ]
+          },
+          "port_directions": {
+            "C": "input",
+            "B": "input",
+            "E": "output"
+          }
+        },
+        "QON4": {
+          "type": "q_pnp",
+          "attributes": {
+            "value": "PNP_PWR",
+            "ref": "QON4"
+          },
+          "connections": {
+            "C": [
+              54
+            ],
+            "B": [
+              31
+            ],
+            "E": [
+              32
+            ]
+          },
+          "port_directions": {
+            "C": "output",
+            "B": "input",
+            "E": "output"
+          }
+        },
+        "vee_20": {
+          "type": "vee",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              54
+            ]
+          },
+          "attributes": {
+            "name": "VEE"
+          }
+        },
+        "REOP1": {
+          "type": "r_v",
+          "attributes": {
+            "value": "0.47",
+            "ref": "REOP1"
+          },
+          "connections": {
+            "A": [
+              18
+            ],
+            "B": [
+              4
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "RBPU2": {
+          "type": "r_v",
+          "attributes": {
+            "value": "100",
+            "ref": "RBPU2"
+          },
+          "connections": {
+            "A": [
+              15
+            ],
+            "B": [
+              19
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "vcc_21": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              55
+            ]
+          },
+          "attributes": {
+            "name": "VCC"
+          }
+        },
+        "QOP2": {
+          "type": "q_npn",
+          "attributes": {
+            "value": "NPN_PWR",
+            "ref": "QOP2"
+          },
+          "connections": {
+            "C": [
+              55
+            ],
+            "B": [
+              19
+            ],
+            "E": [
+              20
+            ]
+          },
+          "port_directions": {
+            "C": "input",
+            "B": "input",
+            "E": "output"
+          }
+        },
+        "QON3": {
+          "type": "q_pnp",
+          "attributes": {
+            "value": "PNP_PWR",
+            "ref": "QON3"
+          },
+          "connections": {
+            "C": [
+              56
+            ],
+            "B": [
+              29
+            ],
+            "E": [
+              30
+            ]
+          },
+          "port_directions": {
+            "C": "output",
+            "B": "input",
+            "E": "output"
+          }
+        },
+        "vee_22": {
+          "type": "vee",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              56
+            ]
+          },
+          "attributes": {
+            "name": "VEE"
+          }
+        },
+        "REOP2": {
+          "type": "r_v",
+          "attributes": {
+            "value": "0.47",
+            "ref": "REOP2"
+          },
+          "connections": {
+            "A": [
+              20
+            ],
+            "B": [
+              4
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "RBPU3": {
+          "type": "r_v",
+          "attributes": {
+            "value": "100",
+            "ref": "RBPU3"
+          },
+          "connections": {
+            "A": [
+              15
+            ],
+            "B": [
+              21
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "vcc_23": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              57
+            ]
+          },
+          "attributes": {
+            "name": "VCC"
+          }
+        },
+        "QOP3": {
+          "type": "q_npn",
+          "attributes": {
+            "value": "NPN_PWR",
+            "ref": "QOP3"
+          },
+          "connections": {
+            "C": [
+              57
+            ],
+            "B": [
+              21
+            ],
+            "E": [
+              22
+            ]
+          },
+          "port_directions": {
+            "C": "input",
+            "B": "input",
+            "E": "output"
+          }
+        },
+        "QON2": {
+          "type": "q_pnp",
+          "attributes": {
+            "value": "PNP_PWR",
+            "ref": "QON2"
+          },
+          "connections": {
+            "C": [
+              58
+            ],
+            "B": [
+              27
+            ],
+            "E": [
+              28
+            ]
+          },
+          "port_directions": {
+            "C": "output",
+            "B": "input",
+            "E": "output"
+          }
+        },
+        "vee_24": {
+          "type": "vee",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              58
+            ]
+          },
+          "attributes": {
+            "name": "VEE"
+          }
+        },
+        "REOP3": {
+          "type": "r_v",
+          "attributes": {
+            "value": "0.47",
+            "ref": "REOP3"
+          },
+          "connections": {
+            "A": [
+              22
+            ],
+            "B": [
+              4
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "RBPU4": {
+          "type": "r_v",
+          "attributes": {
+            "value": "100",
+            "ref": "RBPU4"
+          },
+          "connections": {
+            "A": [
+              15
+            ],
+            "B": [
+              23
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "vcc_25": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              59
+            ]
+          },
+          "attributes": {
+            "name": "VCC"
+          }
+        },
+        "QOP4": {
+          "type": "q_npn",
+          "attributes": {
+            "value": "NPN_PWR",
+            "ref": "QOP4"
+          },
+          "connections": {
+            "C": [
+              59
+            ],
+            "B": [
+              23
+            ],
+            "E": [
+              24
+            ]
+          },
+          "port_directions": {
+            "C": "input",
+            "B": "input",
+            "E": "output"
+          }
+        },
+        "QON1": {
+          "type": "q_pnp",
+          "attributes": {
+            "value": "PNP_PWR",
+            "ref": "QON1"
+          },
+          "connections": {
+            "C": [
+              60
+            ],
+            "B": [
+              25
+            ],
+            "E": [
+              26
+            ]
+          },
+          "port_directions": {
+            "C": "output",
+            "B": "input",
+            "E": "output"
+          }
+        },
+        "vee_26": {
+          "type": "vee",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              60
+            ]
+          },
+          "attributes": {
+            "name": "VEE"
+          }
+        },
+        "REOP4": {
+          "type": "r_v",
+          "attributes": {
+            "value": "0.47",
+            "ref": "REOP4"
+          },
+          "connections": {
+            "A": [
+              24
+            ],
+            "B": [
+              4
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "RBPD1": {
+          "type": "r_v",
+          "attributes": {
+            "value": "100",
+            "ref": "RBPD1"
+          },
+          "connections": {
+            "A": [
+              16
+            ],
+            "B": [
+              25
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "REON1": {
+          "type": "r_v",
+          "attributes": {
+            "value": "0.47",
+            "ref": "REON1"
+          },
+          "connections": {
+            "A": [
+              26
+            ],
+            "B": [
+              4
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "RBPD2": {
+          "type": "r_v",
+          "attributes": {
+            "value": "100",
+            "ref": "RBPD2"
+          },
+          "connections": {
+            "A": [
+              16
+            ],
+            "B": [
+              27
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "REON2": {
+          "type": "r_v",
+          "attributes": {
+            "value": "0.47",
+            "ref": "REON2"
+          },
+          "connections": {
+            "A": [
+              28
+            ],
+            "B": [
+              4
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "RBPD3": {
+          "type": "r_v",
+          "attributes": {
+            "value": "100",
+            "ref": "RBPD3"
+          },
+          "connections": {
+            "A": [
+              16
+            ],
+            "B": [
+              29
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "REON3": {
+          "type": "r_v",
+          "attributes": {
+            "value": "0.47",
+            "ref": "REON3"
+          },
+          "connections": {
+            "A": [
+              30
+            ],
+            "B": [
+              4
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "RBPD4": {
+          "type": "r_v",
+          "attributes": {
+            "value": "100",
+            "ref": "RBPD4"
+          },
+          "connections": {
+            "A": [
+              16
+            ],
+            "B": [
+              31
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "REON4": {
+          "type": "r_v",
+          "attributes": {
+            "value": "0.47",
+            "ref": "REON4"
+          },
+          "connections": {
+            "A": [
+              32
+            ],
+            "B": [
+              4
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "LOUT": {
+          "type": "l_v",
+          "attributes": {
+            "value": "1.5u",
+            "ref": "LOUT"
+          },
+          "connections": {
+            "A": [
+              4
+            ],
+            "B": [
+              33
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "RLOUT": {
+          "type": "r_v",
+          "attributes": {
+            "value": "10",
+            "ref": "RLOUT"
+          },
+          "connections": {
+            "A": [
+              4
+            ],
+            "B": [
+              33
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "RZOB": {
+          "type": "r_v",
+          "attributes": {
+            "value": "10",
+            "ref": "RZOB"
+          },
+          "connections": {
+            "A": [
+              4
+            ],
+            "B": [
+              34
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_27": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              61
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CZOB": {
+          "type": "c_v",
+          "attributes": {
+            "value": "0.022u",
+            "ref": "CZOB"
+          },
+          "connections": {
+            "A": [
+              34
+            ],
+            "B": [
+              61
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_28": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              62
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "RL": {
+          "type": "r_v",
+          "attributes": {
+            "value": "8",
+            "ref": "RL"
+          },
+          "connections": {
+            "A": [
+              33
+            ],
+            "B": [
+              62
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        }
+      },
+      "ports": {
+        "IN": {
+          "bits": [
+            2
+          ],
+          "direction": "input"
+        },
+        "NIN": {
+          "bits": [
+            3
+          ],
+          "direction": "input"
+        },
+        "OUT": {
+          "bits": [
+            4
+          ],
+          "direction": "output"
+        },
+        "ND2": {
+          "bits": [
+            8
+          ],
+          "direction": "input"
+        },
+        "NBIAS": {
+          "bits": [
+            12
+          ],
+          "direction": "input"
+        }
+      }
+    }
+  }
+}

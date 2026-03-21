@@ -1,0 +1,74 @@
+{
+  "modules": {
+    "": {
+      "cells": {
+        "R1": {
+          "type": "r_v",
+          "attributes": {
+            "value": "10k",
+            "ref": "R1"
+          },
+          "connections": {
+            "A": [
+              2
+            ],
+            "B": [
+              3
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_1": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              4
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "C1": {
+          "type": "c_v",
+          "attributes": {
+            "value": "10nF",
+            "ref": "C1"
+          },
+          "connections": {
+            "A": [
+              3
+            ],
+            "B": [
+              4
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        }
+      },
+      "ports": {
+        "VIN": {
+          "bits": [
+            2
+          ],
+          "direction": "input"
+        },
+        "VOUT": {
+          "bits": [
+            3
+          ],
+          "direction": "output"
+        }
+      }
+    }
+  }
+}

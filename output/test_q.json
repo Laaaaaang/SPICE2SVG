@@ -1,0 +1,19 @@
+﻿{
+  "modules": {
+    "": {
+      "cells": {
+        "Q1": {
+          "type": "Q_3_",
+          "attributes": {"value": "2N2222"},
+          "connections": {"1": [1], "2": [2], "3": [3]},
+          "port_directions": {"1": "output", "2": "input", "3": "output"}
+        }
+      },
+      "ports": {
+        "C": {"bits": [1], "direction": "output"},
+        "B": {"bits": [2], "direction": "input"},
+        "E": {"bits": [3], "direction": "output"}
+      }
+    }
+  }
+}

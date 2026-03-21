@@ -1,0 +1,96 @@
+{
+  "modules": {
+    "": {
+      "cells": {
+        "vcc_1": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              4
+            ]
+          },
+          "attributes": {
+            "name": "VDD"
+          }
+        },
+        "M1": {
+          "type": "pmos",
+          "attributes": {
+            "value": "PMOD",
+            "ref": "M1"
+          },
+          "connections": {
+            "D": [
+              2
+            ],
+            "G": [
+              3
+            ],
+            "S": [
+              4
+            ]
+          },
+          "port_directions": {
+            "D": "output",
+            "G": "input",
+            "S": "input"
+          }
+        },
+        "gnd_2": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              5
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "M2": {
+          "type": "nmos",
+          "attributes": {
+            "value": "NMOD",
+            "ref": "M2"
+          },
+          "connections": {
+            "D": [
+              2
+            ],
+            "G": [
+              3
+            ],
+            "S": [
+              5
+            ]
+          },
+          "port_directions": {
+            "D": "input",
+            "G": "input",
+            "S": "output"
+          }
+        }
+      },
+      "ports": {
+        "VOUT": {
+          "bits": [
+            2
+          ],
+          "direction": "output"
+        },
+        "VIN": {
+          "bits": [
+            3
+          ],
+          "direction": "input"
+        }
+      }
+    }
+  }
+}

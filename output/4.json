@@ -1,0 +1,505 @@
+{
+  "modules": {
+    "": {
+      "cells": {
+        "gnd_1": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              13
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "VREF": {
+          "type": "v",
+          "attributes": {
+            "value": "PULSE(0 {VDDVAL} 0 50p 50p {TCLK/2} {TCLK})",
+            "ref": "VREF"
+          },
+          "connections": {
+            "+": [
+              2
+            ],
+            "-": [
+              13
+            ]
+          },
+          "port_directions": {
+            "+": "input",
+            "-": "output"
+          }
+        },
+        "gnd_2": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              14
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "VBIAS": {
+          "type": "v",
+          "attributes": {
+            "value": "{VCM}",
+            "ref": "VBIAS"
+          },
+          "connections": {
+            "+": [
+              3
+            ],
+            "-": [
+              14
+            ]
+          },
+          "port_directions": {
+            "+": "input",
+            "-": "output"
+          }
+        },
+        "RBIAS": {
+          "type": "r_v",
+          "attributes": {
+            "value": "200k",
+            "ref": "RBIAS"
+          },
+          "connections": {
+            "A": [
+              4
+            ],
+            "B": [
+              3
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_3": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              15
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CCTRL": {
+          "type": "c_v",
+          "attributes": {
+            "value": "300p",
+            "ref": "CCTRL"
+          },
+          "connections": {
+            "A": [
+              4
+            ],
+            "B": [
+              15
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_4": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              16
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "RLEAK": {
+          "type": "r_v",
+          "attributes": {
+            "value": "2Meg",
+            "ref": "RLEAK"
+          },
+          "connections": {
+            "A": [
+              4
+            ],
+            "B": [
+              16
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "XPFD": {
+          "type": "x",
+          "attributes": {
+            "value": "PFD_CP_ABS",
+            "ref": "XPFD"
+          },
+          "connections": {},
+          "port_directions": {}
+        },
+        "XDL1": {
+          "type": "x",
+          "attributes": {
+            "value": "DLL_STAGE",
+            "ref": "XDL1"
+          },
+          "connections": {},
+          "port_directions": {}
+        },
+        "XDL2": {
+          "type": "x",
+          "attributes": {
+            "value": "DLL_STAGE",
+            "ref": "XDL2"
+          },
+          "connections": {},
+          "port_directions": {}
+        },
+        "XDL3": {
+          "type": "x",
+          "attributes": {
+            "value": "DLL_STAGE",
+            "ref": "XDL3"
+          },
+          "connections": {},
+          "port_directions": {}
+        },
+        "XDL4": {
+          "type": "x",
+          "attributes": {
+            "value": "DLL_STAGE",
+            "ref": "XDL4"
+          },
+          "connections": {},
+          "port_directions": {}
+        },
+        "XDL5": {
+          "type": "x",
+          "attributes": {
+            "value": "DLL_STAGE",
+            "ref": "XDL5"
+          },
+          "connections": {},
+          "port_directions": {}
+        },
+        "XDL6": {
+          "type": "x",
+          "attributes": {
+            "value": "DLL_STAGE",
+            "ref": "XDL6"
+          },
+          "connections": {},
+          "port_directions": {}
+        },
+        "XDL7": {
+          "type": "x",
+          "attributes": {
+            "value": "DLL_STAGE",
+            "ref": "XDL7"
+          },
+          "connections": {},
+          "port_directions": {}
+        },
+        "XDL8": {
+          "type": "x",
+          "attributes": {
+            "value": "DLL_STAGE",
+            "ref": "XDL8"
+          },
+          "connections": {},
+          "port_directions": {}
+        },
+        "gnd_5": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              17
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CT1": {
+          "type": "c_v",
+          "attributes": {
+            "value": "10f",
+            "ref": "CT1"
+          },
+          "connections": {
+            "A": [
+              6
+            ],
+            "B": [
+              17
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_6": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              18
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CT2": {
+          "type": "c_v",
+          "attributes": {
+            "value": "10f",
+            "ref": "CT2"
+          },
+          "connections": {
+            "A": [
+              7
+            ],
+            "B": [
+              18
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_7": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              19
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CT3": {
+          "type": "c_v",
+          "attributes": {
+            "value": "10f",
+            "ref": "CT3"
+          },
+          "connections": {
+            "A": [
+              8
+            ],
+            "B": [
+              19
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_8": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              20
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CT4": {
+          "type": "c_v",
+          "attributes": {
+            "value": "10f",
+            "ref": "CT4"
+          },
+          "connections": {
+            "A": [
+              9
+            ],
+            "B": [
+              20
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_9": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              21
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CT5": {
+          "type": "c_v",
+          "attributes": {
+            "value": "10f",
+            "ref": "CT5"
+          },
+          "connections": {
+            "A": [
+              10
+            ],
+            "B": [
+              21
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_10": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              22
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CT6": {
+          "type": "c_v",
+          "attributes": {
+            "value": "10f",
+            "ref": "CT6"
+          },
+          "connections": {
+            "A": [
+              11
+            ],
+            "B": [
+              22
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_11": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              23
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CT7": {
+          "type": "c_v",
+          "attributes": {
+            "value": "10f",
+            "ref": "CT7"
+          },
+          "connections": {
+            "A": [
+              12
+            ],
+            "B": [
+              23
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        },
+        "gnd_12": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              24
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
+        "CT8": {
+          "type": "c_v",
+          "attributes": {
+            "value": "10f",
+            "ref": "CT8"
+          },
+          "connections": {
+            "A": [
+              5
+            ],
+            "B": [
+              24
+            ]
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          }
+        }
+      },
+      "ports": {}
+    }
+  }
+}
