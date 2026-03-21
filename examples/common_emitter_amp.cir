@@ -1,0 +1,24 @@
+* Common Emitter Amplifier
+*
+*        VCC
+*         |
+*       [RC 4.7k]
+*         |
+*   VIN --+--[RB 100k]--+--- VOUT
+*                        |
+*                       (Q1 NPN)
+*                        |
+*                      [RE 1k]
+*                        |
+*                       GND
+*
+
+.model 2N2222 NPN (BF=200 IS=1e-14)
+
+VCC VCC 0 12
+RB VIN BASE 100k
+RC VCC VOUT 4.7k
+RE EMITTER 0 1k
+Q1 VOUT BASE EMITTER 2N2222
+
+.end

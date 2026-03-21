@@ -1,0 +1,166 @@
+* ============================================================
+* Simple Class-AB Amplifier
+* Topology:
+* Differential input + current mirror load + VAS
+* + Vbe multiplier bias + complementary emitter follower output
+* + global negative feedback
+* ============================================================
+
+.title Simple_Diff_VAS_VbeMul_ClassAB_Amp
+
+* ----------------------------
+* Power Supply
+* ----------------------------
+VCC  VCC   0   DC  +15
+VEE  VEE   0   DC  -15
+
+* ----------------------------
+* Input Source
+* ----------------------------
+* Non-inverting input signal
+VIN  IN    0   AC 1  SIN(0 0.1 1k)
+
+* ----------------------------
+* Feedback Network
+* ----------------------------
+* Closed-loop gain = 1 + RF/RG ≈ 1 + 22k/1k = 23
+RF   OUT   NFB   22k
+RG   NFB   0     1k
+
+* Small input resistor / stopper
+RIN  IN    NIP   1k
+
+* ----------------------------
+* Differential Input Stage
+* Q1: non-inverting input transistor
+* Q2: inverting input transistor
+* Tail current source at node TAIL
+* ----------------------------
+Q1   C1    NIP   TAIL   QNPN
+Q2   C2    NFB   TAIL   QNPN
+
+* Tail current source ~2mA
+ITAIL TAIL VEE   DC 2mA
+
+* ----------------------------
+* PNP Current Mirror Active Load
+* Q3 diode-connected
+* Q4 mirror transistor
+* This converts diff pair current to single-ended output at C2
+* ----------------------------
+Q3   C1    C1    VCC    QPNP
+Q4   C2    C1    VCC    QPNP
+
+* Optional degeneration / balancing
+* (can be tuned or removed)
+RCM1 C1    0     100Meg
+RCM2 C2    0     100Meg
+
+* ----------------------------
+* VAS (Voltage Amplification Stage)
+* Q5 common-emitter VAS
+* Collector at VAS_C, base driven from diff output node C2
+* Emitter degeneration via RE5, current sink via IVAS
+* ----------------------------
+Q5   VAS_C C2    VAS_E  QNPN
+RE5  VAS_E VEE   220
+
+* VAS bias current ~6mA
+IVAS VAS_E VEE   DC 6mA
+
+* Miller compensation for stability
+CCOMP VAS_C C2   100p
+
+* VAS collector load to VCC
+RC5  VCC   VAS_C 4.7k
+
+* ----------------------------
+* Vbe Multiplier Bias Network
+* Q6 provides adjustable bias between driver bases
+* Upper bias node: BDRV_P
+* Lower bias node: BDRV_N
+* Bias spread roughly Vbe*(1 + RB1/RB2)
+* ----------------------------
+Q6   BDRV_P VBMULT BDRV_N QNPN
+RB1  BDRV_P VBMULT 2.2k
+RB2  VBMULT BDRV_N 1k
+
+* A little current through Vbe multiplier from VAS node
+RBIAS VAS_C BDRV_P 2.2k
+RBIAS2 BDRV_N VEE   2.2k
+
+* ----------------------------
+* Driver / Output Stage
+* Complementary emitter follower output stage
+* Q7/Q8 as drivers
+* Q9/Q10 as power output devices
+* ----------------------------
+
+* Driver stage
+Q7   VCC    BDRV_P  DRV_P   QNPN
+Q8   VEE    BDRV_N  DRV_N   QPNP
+
+* Driver emitter resistors / stoppers
+RDP  DRV_P  B9      47
+RDN  DRV_N  B10     47
+
+* Output power stage
+Q9   VCC    B9      OUT     QNPNPWR
+Q10  VEE    B10     OUT     QPNPPWR
+
+* Emitter ballast resistors improve thermal sharing / stability
+RE9  OUT    0       0.22
+RE10 0      OUT     0.22
+
+* ----------------------------
+* Output Load
+* ----------------------------
+RL   OUT    0       8
+
+* ----------------------------
+* Optional Zobel Network for stability with reactive load
+* ----------------------------
+RZ   OUT    NZ      10
+CZ   NZ     0       100n
+
+* ----------------------------
+* Input bias reference
+* ----------------------------
+RBI  NIP    0       100k
+
+* ----------------------------
+* Device Models
+* These are simple generic models for topology verification.
+* Replace with better models later (e.g. 2N5401/2N5551, MJE15032/33, etc.)
+* ----------------------------
+.model QNPN NPN (
++ IS=1e-14 BF=200 VAF=100
++ CJE=10p CJC=5p TF=0.5n TR=10n
+)
+
+.model QPNP PNP (
++ IS=1e-14 BF=120 VAF=80
++ CJE=12p CJC=6p TF=0.8n TR=15n
+)
+
+.model QNPNPWR NPN (
++ IS=1e-12 BF=80 VAF=50
++ CJE=80p CJC=50p TF=5n TR=100n
+)
+
+.model QPNPPWR PNP (
++ IS=1e-12 BF=60 VAF=40
++ CJE=100p CJC=60p TF=8n TR=150n
+)
+
+* ----------------------------
+* Analysis Commands
+* ----------------------------
+.op
+.ac dec 100 10 1Meg
+.tran 0 20m 0 1u
+
+* For distortion checking (ngspice / LTspice may vary)
+*.four 1k V(OUT)
+
+.end

@@ -1,0 +1,138 @@
+*============================================================
+* Class-A Power Amplifier - framework netlist
+* extracted from photographed schematic (abstracted, not 1:1)
+*============================================================
+
+*************** SUPPLY ***************
+VCC     VCC     0       DC 90
+VEE     VEE     0       DC -90
+
+CDEC_P  VCC     0       2200u
+CDEC_N  VEE     0       2200u
+
+*************** INPUT ***************
+VIN     IN      0       AC 1  SIN(0 0.2 1k)
+
+* input relay / RF filter / bias return
+RIN     IN      NIN     2k
+CINRF   NIN     0       100p
+RINB    NIN     0       270k
+
+*************** GLOBAL FEEDBACK ***************
+RFB     OUT     FB      22k
+RFBG    FB      0       1k
+
+*************** INPUT FRONT END ***************
+* Original Q1~Q8 looks like a high-grade front-end around dual FET + cascode.
+* Here it is collapsed into a FET differential pair with active mirror load.
+
+JINP    ND1     NIN     NTAIL   NJF_IN
+JINN    ND2     FB      NTAIL   NJF_IN
+ITAIL   NTAIL   VEE     DC 8m
+
+* active load / mirror
+QML1    ND1     ND1     VCC     PNP_SMALL
+QML2    NERR    ND1     VCC     PNP_SMALL
+
+* light DC reference for operating point
+RERR    NERR    0       100k
+
+*************** DC SERVO (IC1 / IC2 abstraction) ***************
+* The original drawing contains op-amp based LF / offset correction.
+* Here: a slow servo senses OUT and injects correction into FB node.
+
+XSERVO  0       OUT     NSRV    VCC     VEE     OPAMP_SIMPLE
+RSRV    NSRV    FB      330k
+CSRV    NSRV    OUT     2.2u
+
+*************** VAS / DOMINANT POLE ***************
+QVAS    VAS     NERR    VEE     NPN_VAS
+IVAS    VCC     VAS     DC 10m
+CCOMP   VAS     NERR    100p
+RSTOP   VAS     NBIAS   100
+
+*************** BIAS SPREAD / THERMAL BLOCK ***************
+* Original Q16/Q17 + diodes + thermal sensor are abstracted here.
+* This is only the framework equivalent, not the exact bias servo.
+BUPSRC  BUP     0       V = { V(VAS) + 1.25 }
+BDNSRC  BDN     0       V = { V(VAS) - 1.25 }
+
+*************** DRIVER STAGE ***************
+QDRVU   VCC     BUP     DRVUP   NPN_DRV
+QDRVD   VEE     BDN     DRVDN   PNP_DRV
+
+*************** PARALLEL OUTPUT BANK ***************
+* The original schematic has a much denser parallel bank (~9 devices / side).
+* Here 4-parallel per side is written as the structural skeleton.
+* To get closer to the original, keep duplicating the cells below.
+
+* ---- upper bank ----
+RBPU1   DRVUP   BPU1    100
+QOP1    VCC     BPU1    EPU1    NPN_PWR
+REOP1   EPU1    OUT     0.47
+
+RBPU2   DRVUP   BPU2    100
+QOP2    VCC     BPU2    EPU2    NPN_PWR
+REOP2   EPU2    OUT     0.47
+
+RBPU3   DRVUP   BPU3    100
+QOP3    VCC     BPU3    EPU3    NPN_PWR
+REOP3   EPU3    OUT     0.47
+
+RBPU4   DRVUP   BPU4    100
+QOP4    VCC     BPU4    EPU4    NPN_PWR
+REOP4   EPU4    OUT     0.47
+
+* ---- lower bank ----
+RBPD1   DRVDN   BPD1    100
+QON1    VEE     BPD1    EPD1    PNP_PWR
+REON1   EPD1    OUT     0.47
+
+RBPD2   DRVDN   BPD2    100
+QON2    VEE     BPD2    EPD2    PNP_PWR
+REON2   EPD2    OUT     0.47
+
+RBPD3   DRVDN   BPD3    100
+QON3    VEE     BPD3    EPD3    PNP_PWR
+REON3   EPD3    OUT     0.47
+
+RBPD4   DRVDN   BPD4    100
+QON4    VEE     BPD4    EPD4    PNP_PWR
+REON4   EPD4    OUT     0.47
+
+*************** OUTPUT NETWORK ***************
+* Original image shows output coil + damping resistor and Zobel-like network.
+
+LOUT    OUT     SPK     1.5u
+RLOUT   OUT     SPK     10
+
+RZOB    OUT     NZ      10
+CZOB    NZ      0       0.022u
+
+*************** LOAD ***************
+RL      SPK     0       8
+
+*************** DEVICE MODELS ***************
+.model NJF_IN    NJF( BETA=4m VTO=-1.5 LAMBDA=2m RD=20 RS=20 )
+.model NPN_SMALL NPN( IS=1e-14 BF=150 VAF=100 CJE=20p CJC=5p TF=0.5n )
+.model PNP_SMALL PNP( IS=1e-14 BF=120 VAF=80  CJE=30p CJC=8p TF=1n )
+.model NPN_VAS   NPN( IS=5e-14  BF=120 VAF=200 CJE=30p CJC=8p TF=20n )
+.model NPN_DRV   NPN( IS=1e-13  BF=80  VAF=100 CJE=100p CJC=60p TF=50n )
+.model PNP_DRV   PNP( IS=1e-13  BF=60  VAF=100 CJE=120p CJC=80p TF=80n )
+.model NPN_PWR   NPN( IS=1e-12  BF=50  VAF=80  CJE=500p CJC=300p TF=0.3u )
+.model PNP_PWR   PNP( IS=1e-12  BF=40  VAF=80  CJE=600p CJC=350p TF=0.5u )
+
+*************** SIMPLE OP-AMP MACRO ***************
+.subckt OPAMP_SIMPLE INP INN OUT VCC VEE
+EGAIN   NINT    0       INP     INN     1e5
+RISO    NINT    OUT     100
+ROUT    OUT     0       1Meg
+COUT    OUT     0       10p
+.ends OPAMP_SIMPLE
+
+*************** ANALYSIS ***************
+.op
+.ac dec 100 1 1Meg
+.tran 0.1u 20m
+
+.end

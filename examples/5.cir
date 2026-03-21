@@ -1,0 +1,119 @@
+*============================================================
+* Dual Differential Input -> Dual VAS -> Vbe Multiplier
+* -> Complementary Driver -> Push-Pull Output
+* file: dual_diff_vas_pushpull.cir
+*============================================================
+
+*************** POWER SUPPLY ***************
+VCC     VCC     0       DC 35
+VEE     VEE     0       DC -35
+
+*************** INPUT SOURCES ***************
+* 四个输入端分别对应两个差分对
+* 你可以后续改成一个接信号，一个接反馈
+VIN1P   IN1P    0       DC 0
+VIN1N   IN1N    0       DC 0
+VIN2P   IN2P    0       DC 0
+VIN2N   IN2N    0       DC 0
+
+*************** DIFF PAIR #1 (NPN LTP) ***************
+* 第一组差分对 + 尾电流源
+ITAIL1  TAIL1   VEE     DC 2m
+
+Q1      C1P     IN1P    TAIL1   NPN_IN
+Q2      C1N     IN1N    TAIL1   NPN_IN
+
+RC1P    VCC     C1P     10k
+RC1N    VCC     C1N     10k
+
+*************** DIFF PAIR #2 (PNP LTP) ***************
+* 第二组差分对 + 尾电流源
+ITAIL2  VCC     TAIL2   DC 2m
+
+Q3      C2P     IN2P    TAIL2   PNP_IN
+Q4      C2N     IN2N    TAIL2   PNP_IN
+
+RC2P    C2P     VEE     10k
+RC2N    C2N     VEE     10k
+
+*************** VAS #1 (Upper-side VAS, PNP) ***************
+* 第一差分对输出 -> 上侧 VAS
+* 输出节点 BUP 将作为偏置链上端 / 上驱动基极节点
+REVAS1  VCC     EVAS1   2.2k
+QVAS1   BUP     C1N     EVAS1   PNP_VAS
+ICVAS1  BUP     VEE     DC 4m
+CDOM1   BUP     C1N     47p
+
+*************** VAS #2 (Lower-side VAS, NPN) ***************
+* 第二差分对输出 -> 下侧 VAS
+* 输出节点 BDN 将作为偏置链下端 / 下驱动基极节点
+REVAS2  EVAS2   VEE     2.2k
+QVAS2   BDN     C2N     EVAS2   NPN_VAS
+ICVAS2  VCC     BDN     DC 4m
+CDOM2   BDN     C2N     47p
+
+*************** Vbe MULTIPLIER ***************
+* 在 BUP 和 BDN 之间建立静态偏置电压
+* 这个值决定输出级静态电流，别瞎填，不然热跑飞等着你
+QBIAS   BUP     NB      BDN     NPN_BIAS
+RB1     BUP     NB      2.7k
+RB2     NB      BDN     1.0k
+CBIAS   BUP     BDN     100p
+
+*************** DRIVER STAGE ***************
+* 上驱动：NPN emitter follower
+QDRVU   VCC     BUP     NDRVU   NPN_DRV
+
+* 下驱动：PNP emitter follower
+QDRVL   VEE     BDN     NDRVL   PNP_DRV
+
+RBDU    NDRVU   BOUTU   47
+RBDL    NDRVL   BOUTL   47
+
+*************** PUSH-PULL OUTPUT STAGE ***************
+* 互补推挽输出
+QOUTU   VCC     BOUTU   EOUTU   NPN_OUT
+QOUTL   VEE     BOUTL   EOUTL   PNP_OUT
+
+REU     EOUTU   OUT     0.22
+REL     EOUTL   OUT     0.22
+
+*************** OUTPUT NETWORK / LOAD ***************
+RLOAD   OUT     0       8
+CZOB    NZ      0       100n
+RZOB    OUT     NZ      10
+
+*************** SMALL HELPER RESISTORS ***************
+* 防止某些节点在某些仿真器里漂得太离谱
+RLEAK1  BUP     0       1Meg
+RLEAK2  BDN     0       1Meg
+RLEAK3  OUT     0       1Meg
+
+*************** EXAMPLE FEEDBACK (COMMENTED) ***************
+* 下面只是示意，不默认接入
+* 你若要做成闭环功放，可以把某个差分对的一端接输出反馈
+*
+*RFB     OUT     IN1N    22k
+*RINREF  IN1N    0       1k
+
+*************** DEVICE MODELS ***************
+.model NPN_IN   NPN( IS=1e-14 BF=180 VAF=120 CJE=8p  CJC=3p  TF=0.5n )
+.model PNP_IN   PNP( IS=1e-14 BF=120 VAF=80  CJE=10p CJC=4p  TF=1n )
+
+.model NPN_VAS  NPN( IS=5e-14  BF=120 VAF=200 CJE=20p CJC=6p TF=10n )
+.model PNP_VAS  PNP( IS=5e-14  BF=90  VAF=150 CJE=25p CJC=8p TF=15n )
+
+.model NPN_BIAS NPN( IS=1e-14 BF=120 VAF=100 CJE=10p CJC=4p TF=1n )
+
+.model NPN_DRV  NPN( IS=1e-13 BF=80  VAF=100 CJE=80p  CJC=40p TF=30n )
+.model PNP_DRV  PNP( IS=1e-13 BF=60  VAF=100 CJE=100p CJC=50p TF=50n )
+
+.model NPN_OUT  NPN( IS=1e-12 BF=50  VAF=80  CJE=300p CJC=150p TF=200n )
+.model PNP_OUT  PNP( IS=1e-12 BF=40  VAF=80  CJE=350p CJC=180p TF=300n )
+
+*************** ANALYSIS ***************
+.op
+.tran 0.1u 10m
+.ac dec 100 1 1Meg
+
+.end

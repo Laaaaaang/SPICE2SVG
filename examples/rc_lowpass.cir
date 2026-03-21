@@ -1,0 +1,14 @@
+* RC Low-Pass Filter
+* 截止频率 ≈ 1591.55 Hz
+*
+*     VIN ---[R1 10k]---+--- VOUT
+*                       |
+*                     [C1 10nF]
+*                       |
+*                      GND
+*
+
+R1 VIN VOUT 10k
+C1 VOUT 0 10nF
+
+.end

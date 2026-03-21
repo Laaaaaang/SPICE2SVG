@@ -1,0 +1,37 @@
+*========================================================
+* CMOS Differential Input Stage
+* file: diff_input_stage.cir
+*========================================================
+
+* Power supply
+VDD     vdd     0       DC 1.8
+
+* Differential inputs
+* 共模电压先设在 0.9V，叠加一个很小的差分扰动
+VINP    inp     0       DC 0.9  AC 0.5m
+VINN    inn     0       DC 0.9  AC -0.5m
+
+* Tail current source
+ITAIL   tail    0       DC 20u
+
+* NMOS differential pair
+M1      outp    inp     tail    0       NMOS    W=20u   L=0.18u
+M2      outn    inn     tail    0       NMOS    W=20u   L=0.18u
+
+* PMOS active load (current mirror)
+M3      outp    outp    vdd     vdd     PMOS    W=40u   L=0.18u
+M4      outn    outp    vdd     vdd     PMOS    W=40u   L=0.18u
+
+* Single-ended output taken from outn
+* 若你要差分输出，就同时观察 outp 和 outn
+
+* Simple MOS models
+.model NMOS NMOS level=1 VTO=0.45 KP=200u LAMBDA=0.02 GAMMA=0.4 PHI=0.7
+.model PMOS PMOS level=1 VTO=-0.45 KP=80u  LAMBDA=0.02 GAMMA=0.4 PHI=0.7
+
+* Analyses
+.op
+.ac dec 100 1 1G
+.tran 1n 1u
+
+.end

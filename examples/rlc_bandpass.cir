@@ -1,0 +1,14 @@
+* RLC Band-Pass Filter
+*
+*     VIN ---[R1 1k]---+---[L1 10mH]--- VOUT
+*                       |
+*                     [C1 100nF]
+*                       |
+*                      GND
+*
+
+R1 VIN N001 1k
+L1 N001 VOUT 10mH
+C1 N001 0 100nF
+
+.end

@@ -1,0 +1,113 @@
+*========================================================
+* Behavioral DLL (Delay-Locked Loop)
+* file: dll_basic.cir
+*--------------------------------------------------------
+* Architecture:
+*   REFCLK -> PFD/CP -> Loop Filter -> VCTRL -> 8-stage VCDL
+*                                            -> FBK to PFD
+*--------------------------------------------------------
+* Notes:
+* 1) This is a behavioral / framework-level DLL.
+* 2) Suitable for ngspice / LTspice style behavioral simulation.
+* 3) If loop polarity is wrong in your simulator, flip the sign of KCP.
+*========================================================
+
+*************** PARAMETERS ***************
+.param VDDVAL=1.8
+.param TCLK=10n
+.param VCM={VDDVAL/2}
+
+*************** SUPPLY ***************
+VDD     VDD     0       {VDDVAL}
+
+*************** REFERENCE CLOCK ***************
+VREF    REF     0       PULSE(0 {VDDVAL} 0 50p 50p {TCLK/2} {TCLK})
+
+*************** CONTROL BIAS + LOOP FILTER ***************
+* VCTRL is biased around mid-supply and adjusted by the charge pump
+VBIAS   VBIAS   0       {VCM}
+RBIAS   VCTRL   VBIAS   200k
+CCTRL   VCTRL   0       300p
+RLEAK   VCTRL   0       2Meg
+.ic V(VCTRL)={VCM}
+
+*************** PHASE DETECTOR / CHARGE PUMP ***************
+* Abstract signed phase detector + charge pump
+* REF and FBK are compared, and current is injected into VCTRL
+XPFD    REF     FBK     VCTRL   VDD     0       PFD_CP_ABS
+
+*************** VOLTAGE-CONTROLLED DELAY LINE ***************
+* 8-stage VCDL, taps are exposed for multiphase clocks
+XDL1    REF     TAP1    VCTRL   VDD     0       DLL_STAGE
+XDL2    TAP1    TAP2    VCTRL   VDD     0       DLL_STAGE
+XDL3    TAP2    TAP3    VCTRL   VDD     0       DLL_STAGE
+XDL4    TAP3    TAP4    VCTRL   VDD     0       DLL_STAGE
+XDL5    TAP4    TAP5    VCTRL   VDD     0       DLL_STAGE
+XDL6    TAP5    TAP6    VCTRL   VDD     0       DLL_STAGE
+XDL7    TAP6    TAP7    VCTRL   VDD     0       DLL_STAGE
+XDL8    TAP7    FBK     VCTRL   VDD     0       DLL_STAGE
+
+*************** OPTIONAL LOADS ON TAPS ***************
+CT1     TAP1    0       10f
+CT2     TAP2    0       10f
+CT3     TAP3    0       10f
+CT4     TAP4    0       10f
+CT5     TAP5    0       10f
+CT6     TAP6    0       10f
+CT7     TAP7    0       10f
+CT8     FBK     0       10f
+
+*************** SUBCKT: DELAY CELL ***************
+* A simple voltage-controlled delay cell:
+*   IN --[V-controlled resistor]--> internal RC node --> smooth inverter --> OUT
+* Higher VCTRL => smaller R => shorter delay
+.subckt DLL_STAGE IN OUT VCTRL VDD VSS
+.param RMIN=300
+.param RMAX=4500
+.param CDEL=400f
+.param VSLOPE=0.03
+
+* voltage-controlled resistor implemented by behavioral current source
+* R(VCTRL) = RMAX - (RMAX-RMIN)*(VCTRL/VDD)
+* clipped into [RMIN, RMAX]
+BRES    N1  IN  I = { V(N1,IN) / ( RMIN + (RMAX-RMIN)*(1 - limit(V(VCTRL,VSS)/V(VDD,VSS), 0, 1)) ) }
+
+C1      N1      VSS     {CDEL}
+
+* smooth inverter, avoids hard discontinuity
+BINV    OUT     VSS     V = { V(VSS) + 0.5*V(VDD,VSS)*(1 - tanh((V(N1,VSS)-0.5*V(VDD,VSS))/VSLOPE)) }
+
+.ends DLL_STAGE
+
+*************** SUBCKT: ABSTRACT PFD + CP ***************
+* Signed phase detector using a smooth phase cross-product:
+* err ~ x*dy/dt - y*dx/dt
+* For sinusoidal signals this is proportional to sin(phase_error).
+* For smoothed clocks it acts like a signed phase comparator near lock.
+*
+* Current is injected into VCTRL directly.
+* If your simulator shows positive-feedback behavior, flip the sign of KCP.
+.subckt PFD_CP_ABS REF FBK VCTRL VDD VSS
+.param VTH=0.9
+.param VS=0.06
+.param KCP=30u
+
+* smoothed logic waveforms in [-1, 1]
+BUPD    VCTRL   VSS     I = { 
++ KCP * (
++ tanh((V(REF,VSS)-VTH)/VS) * ddt(tanh((V(FBK,VSS)-VTH)/VS))
++ -tanh((V(FBK,VSS)-VTH)/VS) * ddt(tanh((V(REF,VSS)-VTH)/VS))
++ )
++ }
+
+.ends PFD_CP_ABS
+
+*************** ANALYSIS ***************
+.tran 1p 5u uic
+.op
+
+*************** MEASUREMENTS ***************
+.measure tran VCTRL_AVG  avg V(VCTRL) from=4u to=5u
+.measure tran TPHASE trig V(REF) val={VCM} rise=200 targ V(FBK) val={VCM} rise=200
+
+.end

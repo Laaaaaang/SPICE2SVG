@@ -1,0 +1,385 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:s="https://github.com/nturley/netlistsvg">
+  <s:properties
+    constants="false"
+    splitsAndJoins="false"
+    genericsLaterals="true">
+    <s:layoutEngine
+        org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers="5"
+        org.eclipse.elk.spacing.nodeNode="35"
+        org.eclipse.elk.direction="DOWN"/>
+  </s:properties>
+<style>
+svg {
+  stroke: #000;
+  fill: none;
+}
+text {
+  fill: #000;
+  stroke: none;
+  font-size: 10px;
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+}
+.nodelabel {
+  text-anchor: middle;
+}
+.inputPortLabel {
+  text-anchor: end;
+}
+.splitjoinBody {
+  fill: #000;
+}
+.symbol {
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+.detail {
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  fill: #000;
+}
+</style>
+
+<!-- ======================== Power Symbols ======================== -->
+<g s:type="vcc" s:width="20" s:height="30" transform="translate(5,20)">
+  <s:alias val="vcc"/>
+  <text x="10" y="-4" class="nodelabel $cell_id" s:attribute="name">name</text>
+  <path d="M0,0 H20 L10,15 Z M10,15 V30" class="$cell_id"/>
+  <g s:x="10" s:y="30" s:pid="A" s:position="bottom"/>
+</g>
+
+<g s:type="vee" s:width="20" s:height="30" transform="translate(40,35)">
+  <s:alias val="vee"/>
+  <text x="10" y="10" class="nodelabel $cell_id" s:attribute="name">name</text>
+  <path d="M0,0 H20 L10,-15 Z M10,-15 V-30" class="$cell_id"/>
+  <g s:x="10" s:y="-30" s:pid="A" s:position="top"/>
+</g>
+
+<g s:type="gnd" s:width="20" s:height="30" transform="translate(80,35)">
+  <s:alias val="gnd"/>
+  <text x="30" y="20" class="nodelabel $cell_id" s:attribute="name">name</text>
+  <path d="M0,0 H20 M3,5 H17 M7,10 H13 M10,0 V-15" class="$cell_id"/>
+  <g s:x="10" s:y="-15" s:pid="A" s:position="top"/>
+</g>
+
+<!-- ======================== Signal Ports ======================== -->
+<g s:type="inputExt" s:width="30" s:height="20" transform="translate(5,70)">
+  <text x="15" y="-4" class="$cell_id" s:attribute="ref">input</text>
+  <s:alias val="$_inputExt_"/>
+  <path d="M0,0 V20 H15 L30,10 15,0 Z" class="$cell_id"/>
+  <g s:x="30" s:y="10" s:pid="Y" s:position="right"/>
+</g>
+
+<g s:type="outputExt" s:width="30" s:height="20" transform="translate(60,70)">
+  <text x="15" y="-4" class="$cell_id" s:attribute="ref">output</text>
+  <s:alias val="$_outputExt_"/>
+  <path d="M30,0 V20 H15 L0,10 15,0 Z" class="$cell_id"/>
+  <g s:x="0" s:y="10" s:pid="A" s:position="left"/>
+</g>
+
+<!-- ======================== Passive: Resistor (vertical) ======================== -->
+<g s:type="resistor_v" s:width="10" s:height="50" transform="translate(25,130)">
+  <s:alias val="r_v"/>
+  <text x="15" y="15" s:attribute="ref" class="$cell_id">R</text>
+  <text x="15" y="30" s:attribute="value" class="$cell_id">val</text>
+  <path d="M0,10 V40 H10 V10 Z" class="symbol $cell_id"/>
+  <path d="M5,0 V10 M5,40 V50" class="connect $cell_id"/>
+  <g s:x="5" s:y="0" s:pid="A" s:position="top"/>
+  <g s:x="5" s:y="50" s:pid="B" s:position="bottom"/>
+</g>
+
+<!-- ======================== Passive: Capacitor (vertical) ======================== -->
+<g s:type="capacitor_v" s:width="30" s:height="50" transform="translate(70,130)">
+  <s:alias val="c_v"/>
+  <text x="25" y="10" s:attribute="ref" class="$cell_id">C</text>
+  <text x="25" y="45" s:attribute="value" class="$cell_id">val</text>
+  <path d="M0,20 H30 M0,30 H30" class="symbol $cell_id"/>
+  <path d="M15,0 V20 M15,30 V50" class="connect $cell_id"/>
+  <g s:x="15" s:y="0" s:pid="A" s:position="top"/>
+  <g s:x="15" s:y="50" s:pid="B" s:position="bottom"/>
+</g>
+
+<!-- ======================== Passive: Inductor (vertical) ======================== -->
+<g s:type="inductor_v" s:width="10" s:height="50" transform="translate(135,130)">
+  <s:alias val="l_v"/>
+  <text x="15" y="15" s:attribute="ref" class="$cell_id">L</text>
+  <text x="15" y="35" s:attribute="value" class="$cell_id">val</text>
+  <path d="M5,5 A5,5 0 0 1 5,15 A5,5 0 0 1 5,25 A5,5 0 0 1 5,35 A5,5 0 0 1 5,45" class="$cell_id"/>
+  <path d="M5,0 V5 M5,45 V50" class="connect $cell_id"/>
+  <g s:x="5" s:y="0" s:pid="A" s:position="top"/>
+  <g s:x="5" s:y="50" s:pid="B" s:position="bottom"/>
+</g>
+
+<!-- ======================== Source: Voltage (vertical) ======================== -->
+<g s:type="voltage_source" s:width="32" s:height="52" transform="translate(20,200)">
+  <s:alias val="v"/>
+  <text x="35" y="20" s:attribute="ref" class="$cell_id">V</text>
+  <text x="35" y="35" s:attribute="value" class="$cell_id">val</text>
+  <circle cx="16" cy="26" r="16" class="symbol $cell_id"/>
+  <path d="M12,22 H20 M16,18 V26" class="detail $cell_id"/>
+  <path d="M12,33 H20" class="detail $cell_id"/>
+  <path d="M16,0 V10 M16,42 V52" class="connect $cell_id"/>
+  <g s:x="16" s:y="0" s:pid="+" s:position="top"/>
+  <g s:x="16" s:y="52" s:pid="-" s:position="bottom"/>
+</g>
+
+<!-- ======================== Source: Current (vertical) ======================== -->
+<g s:type="current_source" s:width="32" s:height="52" transform="translate(75,200)">
+  <s:alias val="i"/>
+  <text x="35" y="20" s:attribute="ref" class="$cell_id">I</text>
+  <text x="35" y="35" s:attribute="value" class="$cell_id">val</text>
+  <circle cx="16" cy="26" r="16" class="symbol $cell_id"/>
+  <path d="M16,34 V18" class="detail $cell_id"/>
+  <path d="m13,22 3,-5 3,5 z" style="fill:#000" class="$cell_id"/>
+  <path d="M16,0 V10 M16,42 V52" class="connect $cell_id"/>
+  <g s:x="16" s:y="0" s:pid="+" s:position="top"/>
+  <g s:x="16" s:y="52" s:pid="-" s:position="bottom"/>
+</g>
+
+<!-- ======================== Diode (vertical) ======================== -->
+<g s:type="diode_v" s:width="20" s:height="50" transform="translate(20,270)">
+  <s:alias val="d_v"/>
+  <text x="25" y="25" s:attribute="ref" class="$cell_id">D</text>
+  <path d="M0,15 H20 L10,35 Z M0,35 H20" class="symbol $cell_id"/>
+  <path d="M10,0 V15 M10,35 V50" class="connect $cell_id"/>
+  <g s:x="10" s:y="0" s:pid="A" s:position="top"/>
+  <g s:x="10" s:y="50" s:pid="K" s:position="bottom"/>
+</g>
+
+<!-- ======================== BJT: NPN ======================== -->
+<g s:type="transistor_npn" s:width="32" s:height="32" transform="translate(15,350)">
+  <s:alias val="q_npn"/>
+  <text x="35" y="10" s:attribute="ref" class="$cell_id">Q</text>
+  <text x="35" y="25" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="16" cy="16" class="symbol $cell_id"/>
+  <path d="M0,16 H12 M12,6 V26" class="detail $cell_id"/>
+  <path d="m12,10 11,-8" class="detail $cell_id"/>
+  <path d="m12,21 11,8" class="detail $cell_id"/>
+  <path d="m23,29 -6,-1 3,-5 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="22" s:y="2" s:pid="C" s:position="top"/>
+  <g s:x="0" s:y="16" s:pid="B" s:position="left"/>
+  <g s:x="23" s:y="29" s:pid="E" s:position="bottom"/>
+</g>
+
+<!-- ======================== BJT: PNP ======================== -->
+<g s:type="transistor_pnp" s:width="32" s:height="32" transform="translate(85,350)">
+  <s:alias val="q_pnp"/>
+  <text x="35" y="10" s:attribute="ref" class="$cell_id">Q</text>
+  <text x="35" y="25" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="16" cy="16" class="symbol $cell_id"/>
+  <path d="M0,16 H12 M12,6 V26" class="detail $cell_id"/>
+  <path d="m12,10 11,-8" class="detail $cell_id"/>
+  <path d="m12,21 11,8" class="detail $cell_id"/>
+  <path d="m14,9 6,-1 -3,-5 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="22" s:y="2" s:pid="C" s:position="top"/>
+  <g s:x="0" s:y="16" s:pid="B" s:position="left"/>
+  <g s:x="23" s:y="29" s:pid="E" s:position="bottom"/>
+</g>
+
+<!-- ======================== MOSFET: NMOS ======================== -->
+<g s:type="nmos" s:width="32" s:height="40" transform="translate(15,420)">
+  <s:alias val="nmos"/>
+  <text x="35" y="12" s:attribute="ref" class="$cell_id">M</text>
+  <text x="35" y="28" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="18" cy="20" class="symbol $cell_id"/>
+  <path d="M0,20 H8" class="detail $cell_id"/>
+  <path d="M10,6 V34" class="detail $cell_id"/>
+  <path d="M14,6 V14 M14,18 V22 M14,26 V34" class="detail $cell_id"/>
+  <path d="M14,10 H24 V0" class="connect $cell_id"/>
+  <path d="M14,30 H24 V40" class="connect $cell_id"/>
+  <path d="M14,20 H24" class="detail $cell_id"/>
+  <path d="m18,17 6,3 -6,3 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="24" s:y="0" s:pid="D" s:position="top"/>
+  <g s:x="0" s:y="20" s:pid="G" s:position="left"/>
+  <g s:x="24" s:y="40" s:pid="S" s:position="bottom"/>
+</g>
+
+<!-- ======================== MOSFET: NMOS (mirrored, gate right) ======================== -->
+<g s:type="nmos_m" s:width="32" s:height="40" transform="translate(50,420)">
+  <s:alias val="nmos_m"/>
+  <text x="-3" y="12" s:attribute="ref" class="$cell_id">M</text>
+  <text x="-3" y="28" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="14" cy="20" class="symbol $cell_id"/>
+  <!-- gate lead from right -->
+  <path d="M32,20 H24" class="detail $cell_id"/>
+  <!-- gate bar -->
+  <path d="M22,6 V34" class="detail $cell_id"/>
+  <!-- channel (broken for N-ch) -->
+  <path d="M18,6 V14 M18,18 V22 M18,26 V34" class="detail $cell_id"/>
+  <!-- drain arm to top -->
+  <path d="M18,10 H8 V0" class="connect $cell_id"/>
+  <!-- source arm to bottom -->
+  <path d="M18,30 H8 V40" class="connect $cell_id"/>
+  <!-- body arrow (inward for N-ch, pointing right) -->
+  <path d="M18,20 H8" class="detail $cell_id"/>
+  <path d="m14,17 -6,3 6,3 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="8" s:y="0" s:pid="D" s:position="top"/>
+  <g s:x="32" s:y="20" s:pid="G" s:position="right" s:dir="output"/>
+  <g s:x="8" s:y="40" s:pid="S" s:position="bottom"/>
+</g>
+
+<!-- ======================== MOSFET: PMOS ======================== -->
+<g s:type="pmos" s:width="32" s:height="40" transform="translate(85,420)">
+  <s:alias val="pmos"/>
+  <text x="35" y="12" s:attribute="ref" class="$cell_id">M</text>
+  <text x="35" y="28" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="18" cy="20" class="symbol $cell_id"/>
+  <path d="M0,20 H6" class="detail $cell_id"/>
+  <circle cx="8" cy="20" r="2" class="symbol $cell_id"/>
+  <path d="M10,6 V34" class="detail $cell_id"/>
+  <path d="M14,6 V34" class="detail $cell_id"/>
+  <path d="M14,10 H24 V0" class="connect $cell_id"/>
+  <path d="M14,30 H24 V40" class="connect $cell_id"/>
+  <path d="M24,20 H14" class="detail $cell_id"/>
+  <path d="m20,17 -6,3 6,3 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="24" s:y="0" s:pid="S" s:position="top"/>
+  <g s:x="0" s:y="20" s:pid="G" s:position="left"/>
+  <g s:x="24" s:y="40" s:pid="D" s:position="bottom"/>
+</g>
+
+<!-- ======================== MOSFET: PMOS (mirrored, gate right) ======================== -->
+<g s:type="pmos_m" s:width="32" s:height="40" transform="translate(120,420)">
+  <s:alias val="pmos_m"/>
+  <text x="-3" y="12" s:attribute="ref" class="$cell_id">M</text>
+  <text x="-3" y="28" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="14" cy="20" class="symbol $cell_id"/>
+  <!-- gate lead from right + bubble -->
+  <path d="M32,20 H26" class="detail $cell_id"/>
+  <circle cx="24" cy="20" r="2" class="symbol $cell_id"/>
+  <!-- gate bar -->
+  <path d="M22,6 V34" class="detail $cell_id"/>
+  <!-- channel (solid for P-ch) -->
+  <path d="M18,6 V34" class="detail $cell_id"/>
+  <!-- source arm to top (→VDD) -->
+  <path d="M18,10 H8 V0" class="connect $cell_id"/>
+  <!-- drain arm to bottom (→output) -->
+  <path d="M18,30 H8 V40" class="connect $cell_id"/>
+  <!-- body arrow (outward for P-ch, pointing left) -->
+  <path d="M8,20 H18" class="detail $cell_id"/>
+  <path d="m12,17 6,3 -6,3 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="8" s:y="0" s:pid="S" s:position="top"/>
+  <g s:x="32" s:y="20" s:pid="G" s:position="right" s:dir="output"/>
+  <g s:x="8" s:y="40" s:pid="D" s:position="bottom"/>
+</g>
+
+<!-- ======================== BJT: NPN (mirrored, base right) ======================== -->
+<g s:type="transistor_npn_m" s:width="32" s:height="32" transform="translate(50,350)">
+  <s:alias val="q_npn_m"/>
+  <text x="-3" y="10" s:attribute="ref" class="$cell_id">Q</text>
+  <text x="-3" y="25" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="16" cy="16" class="symbol $cell_id"/>
+  <path d="M32,16 H20 M20,6 V26" class="detail $cell_id"/>
+  <path d="m20,10 -11,-8" class="detail $cell_id"/>
+  <path d="m20,21 -11,8" class="detail $cell_id"/>
+  <!-- npn arrow pointing outward (left-down) -->
+  <path d="m9,29 6,-1 -3,-5 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="10" s:y="2" s:pid="C" s:position="top"/>
+  <g s:x="32" s:y="16" s:pid="B" s:position="right" s:dir="output"/>
+  <g s:x="9" s:y="29" s:pid="E" s:position="bottom"/>
+</g>
+
+<!-- ======================== BJT: PNP (mirrored, base right) ======================== -->
+<g s:type="transistor_pnp_m" s:width="32" s:height="32" transform="translate(120,350)">
+  <s:alias val="q_pnp_m"/>
+  <text x="-3" y="10" s:attribute="ref" class="$cell_id">Q</text>
+  <text x="-3" y="25" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="16" cy="16" class="symbol $cell_id"/>
+  <path d="M32,16 H20 M20,6 V26" class="detail $cell_id"/>
+  <path d="m20,10 -11,-8" class="detail $cell_id"/>
+  <path d="m20,21 -11,8" class="detail $cell_id"/>
+  <!-- pnp arrow pointing inward (right-up) -->
+  <path d="m18,9 -6,-1 3,-5 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="10" s:y="2" s:pid="C" s:position="top"/>
+  <g s:x="32" s:y="16" s:pid="B" s:position="right" s:dir="output"/>
+  <g s:x="9" s:y="29" s:pid="E" s:position="bottom"/>
+</g>
+
+<!-- ======================== MOSFET: NMOS (mirror-left, gate left non-lateral) ======================== -->
+<g s:type="nmos_ml" s:width="32" s:height="40" transform="translate(15,500)">
+  <s:alias val="nmos_ml"/>
+  <text x="35" y="12" s:attribute="ref" class="$cell_id">M</text>
+  <text x="35" y="28" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="18" cy="20" class="symbol $cell_id"/>
+  <path d="M0,20 H8" class="detail $cell_id"/>
+  <path d="M10,6 V34" class="detail $cell_id"/>
+  <path d="M14,6 V14 M14,18 V22 M14,26 V34" class="detail $cell_id"/>
+  <path d="M14,10 H24 V0" class="connect $cell_id"/>
+  <path d="M14,30 H24 V40" class="connect $cell_id"/>
+  <path d="M14,20 H24" class="detail $cell_id"/>
+  <path d="m18,17 6,3 -6,3 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="24" s:y="0" s:pid="D" s:position="top"/>
+  <g s:x="0" s:y="20" s:pid="G" s:position="left" s:dir="output"/>
+  <g s:x="24" s:y="40" s:pid="S" s:position="bottom"/>
+</g>
+
+<!-- ======================== MOSFET: PMOS (mirror-left, gate left non-lateral) ======================== -->
+<g s:type="pmos_ml" s:width="32" s:height="40" transform="translate(85,500)">
+  <s:alias val="pmos_ml"/>
+  <text x="35" y="12" s:attribute="ref" class="$cell_id">M</text>
+  <text x="35" y="28" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="18" cy="20" class="symbol $cell_id"/>
+  <path d="M0,20 H6" class="detail $cell_id"/>
+  <circle cx="8" cy="20" r="2" class="symbol $cell_id"/>
+  <path d="M10,6 V34" class="detail $cell_id"/>
+  <path d="M14,6 V34" class="detail $cell_id"/>
+  <path d="M14,10 H24 V0" class="connect $cell_id"/>
+  <path d="M14,30 H24 V40" class="connect $cell_id"/>
+  <path d="M24,20 H14" class="detail $cell_id"/>
+  <path d="m20,17 -6,3 6,3 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="24" s:y="0" s:pid="S" s:position="top"/>
+  <g s:x="0" s:y="20" s:pid="G" s:position="left" s:dir="output"/>
+  <g s:x="24" s:y="40" s:pid="D" s:position="bottom"/>
+</g>
+
+<!-- ======================== BJT: NPN (mirror-left, base left non-lateral) ======================== -->
+<g s:type="transistor_npn_ml" s:width="32" s:height="32" transform="translate(15,560)">
+  <s:alias val="q_npn_ml"/>
+  <text x="35" y="10" s:attribute="ref" class="$cell_id">Q</text>
+  <text x="35" y="25" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="16" cy="16" class="symbol $cell_id"/>
+  <path d="M0,16 H12 M12,6 V26" class="detail $cell_id"/>
+  <path d="m12,10 11,-8" class="detail $cell_id"/>
+  <path d="m12,21 11,8" class="detail $cell_id"/>
+  <path d="m23,29 -6,-1 3,-5 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="22" s:y="2" s:pid="C" s:position="top"/>
+  <g s:x="0" s:y="16" s:pid="B" s:position="left" s:dir="output"/>
+  <g s:x="23" s:y="29" s:pid="E" s:position="bottom"/>
+</g>
+
+<!-- ======================== BJT: PNP (mirror-left, base left non-lateral) ======================== -->
+<g s:type="transistor_pnp_ml" s:width="32" s:height="32" transform="translate(85,560)">
+  <s:alias val="q_pnp_ml"/>
+  <text x="35" y="10" s:attribute="ref" class="$cell_id">Q</text>
+  <text x="35" y="25" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="16" cy="16" class="symbol $cell_id"/>
+  <path d="M0,16 H12 M12,6 V26" class="detail $cell_id"/>
+  <path d="m12,10 11,-8" class="detail $cell_id"/>
+  <path d="m12,21 11,8" class="detail $cell_id"/>
+  <path d="m14,9 6,-1 -3,-5 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="22" s:y="2" s:pid="C" s:position="top"/>
+  <g s:x="0" s:y="16" s:pid="B" s:position="left" s:dir="output"/>
+  <g s:x="23" s:y="29" s:pid="E" s:position="bottom"/>
+</g>
+
+<!-- ======================== Generic (fallback) ======================== -->
+<g s:type="generic" s:width="30" s:height="40" transform="translate(150, 500)">
+  <text x="15" y="-4" class="nodelabel $cell_id" s:attribute="ref">generic</text>
+  <rect width="30" height="40" x="0" y="0" s:generic="body" class="$cell_id"/>
+  <g transform="translate(30,10)" s:x="30" s:y="10" s:pid="out0" s:position="right">
+    <text x="5" y="-4" class="$cell_id">out0</text>
+  </g>
+  <g transform="translate(30,30)" s:x="30" s:y="30" s:pid="out1" s:position="right">
+    <text x="5" y="-4" class="$cell_id">out1</text>
+  </g>
+  <g transform="translate(0,10)" s:x="0" s:y="10" s:pid="in0" s:position="left">
+    <text x="-3" y="-4" class="inputPortLabel $cell_id">in0</text>
+  </g>
+  <g transform="translate(0,30)" s:x="0" s:y="30" s:pid="in1" s:position="left">
+    <text x="-3" y="-4" class="inputPortLabel $cell_id">in1</text>
+  </g>
+</g>
+
+</svg>

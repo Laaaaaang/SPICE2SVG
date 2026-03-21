@@ -1,0 +1,34 @@
+# .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual env
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Output artifacts
+output/
+*.net
+*_sklib.py
+*_skidl.py
+*.code-search
+
+# Python caches and test caches
+.pytest_cache/
+.mypy_cache/
+
+# OS
+Thumbs.db
+.DS_Store

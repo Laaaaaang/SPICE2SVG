@@ -1,0 +1,21 @@
+* CMOS Inverter
+*
+*        VDD
+*         |
+*        (M1 PMOS)
+*         |
+*   VIN --+--- VOUT
+*         |
+*        (M2 NMOS)
+*         |
+*        GND
+*
+
+.model PMOD PMOS (VTO=-0.7 KP=50u)
+.model NMOD NMOS (VTO=0.7 KP=110u)
+
+VDD VDD 0 5
+M1 VOUT VIN VDD VDD PMOD W=2u L=0.18u
+M2 VOUT VIN 0 0 NMOD W=1u L=0.18u
+
+.end
