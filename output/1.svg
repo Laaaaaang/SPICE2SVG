@@ -568,9 +568,9 @@
   <line x1="622" x2="690" y1="254" y2="254" class="net_8"/>
   <line x1="690" x2="622" y1="254" y2="254" class="net_8"/>
   <line x1="622" x2="622" y1="254" y2="863" class="net_8"/>
-  <line x1="622" x2="295" y1="863" y2="863" class="net_8"/>
+  <line x1="622" x2="283" y1="863" y2="863" class="net_8"/>
   <circle cx="622" cy="254" r="2" style="fill:#000" class="net_8"/>
-  <line x1="295" x2="295" y1="863" y2="884" class="net_8"/>
+  <line x1="283" x2="283" y1="863" y2="884" class="net_8"/>
   <line x1="690" x2="622" y1="254" y2="254" class="net_8"/>
   <line x1="622" x2="622" y1="254" y2="289" class="net_8"/>
   <line x1="622" x2="581" y1="289" y2="289" class="net_8"/>
@@ -603,8 +603,8 @@
   <line x1="587" x2="404" y1="209" y2="209" class="net_6"/>
   <line x1="404" x2="404" y1="209" y2="229" class="net_6"/>
   <line x1="118" x2="118" y1="1005" y2="1010" class="net_21"/>
-  <line x1="296" x2="296" y1="911" y2="943" class="net_7"/>
-  <line x1="296" x2="118" y1="943" y2="943" class="net_7"/>
+  <line x1="282" x2="282" y1="911" y2="943" class="net_7"/>
+  <line x1="282" x2="118" y1="943" y2="943" class="net_7"/>
   <circle cx="118" cy="943" r="2" style="fill:#000" class="net_7"/>
   <line x1="118" x2="118" y1="943" y2="953" class="net_7"/>
   <line x1="118" x2="118" y1="267" y2="953" class="net_7"/>
@@ -702,6 +702,4 @@
   <line x1="317" x2="327" y1="421" y2="421" class="net_16"/>
   <line x1="268" x2="268" y1="618" y2="687" class="net_17"/>
   <line x1="268" x2="278" y1="687" y2="687" class="net_17"/>
-  <line x1="283" x2="295" y1="884" y2="884" class="net_8"/>
-  <line x1="282" x2="296" y1="911" y2="911" class="net_7"/>
 </svg>

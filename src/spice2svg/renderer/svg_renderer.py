@@ -300,15 +300,62 @@ def _mirror_diff_pairs_in_svg(
                         )
                     svg_text = svg_text[:m.start()] + new_line + svg_text[m.end():]
                 else:
-                    # 垂直线: 保持原线不变, 添加水平桥接
-                    new_bridge_lines.append(
-                        f'  <line x1="{new_gx}" x2="{orig_gx}" '
-                        f'y1="{gy}" y2="{gy}" class="{net}"/>'
+                    # 垂直线: 整体水平偏移到新 pin x 位置
+                    far_y = y2 if ep == 1 else y1
+                    new_line = (
+                        f'<line x1="{new_gx}" x2="{new_gx}" '
+                        f'y1="{y1}" y2="{y2}" class="{net}"/>'
                     )
+                    svg_text = svg_text[:m.start()] + new_line + svg_text[m.end():]
+
+                    # 级联: 将远端相邻的水平线段端点也偏移过来
+                    adj_match = None
+                    for m2 in pat.finditer(svg_text):
+                        x1b = int(m2.group(1))
+                        x2b = int(m2.group(2))
+                        y1b = int(m2.group(3))
+                        y2b = int(m2.group(4))
+                        net2 = m2.group(5)
+                        if net2 != net:
+                            continue
+                        # 只级联水平线 (y1==y2), 避免连锁修改垂直线
+                        if y1b != y2b:
+                            continue
+                        ep2 = 0
+                        if x1b == orig_gx and y1b == far_y:
+                            ep2 = 1
+                        elif x2b == orig_gx and y2b == far_y:
+                            ep2 = 2
+                        if ep2:
+                            adj_match = (m2, ep2, x1b, x2b, y1b, y2b, net2)
+                            break
+
+                    if adj_match:
+                        m2, ep2, x1b, x2b, y1b, y2b, net2 = adj_match
+                        if ep2 == 1:
+                            adj_line = (
+                                f'<line x1="{new_gx}" x2="{x2b}" '
+                                f'y1="{y1b}" y2="{y2b}" class="{net2}"/>'
+                            )
+                        else:
+                            adj_line = (
+                                f'<line x1="{x1b}" x2="{new_gx}" '
+                                f'y1="{y1b}" y2="{y2b}" class="{net2}"/>'
+                            )
+                        svg_text = (svg_text[:m2.start()] + adj_line
+                                    + svg_text[m2.end():])
+                    else:
+                        # 远端无水平线: 在远端添加短桥接
+                        lo = min(new_gx, orig_gx)
+                        hi = max(new_gx, orig_gx)
+                        new_bridge_lines.append(
+                            f'  <line x1="{lo}" x2="{hi}" '
+                            f'y1="{far_y}" y2="{far_y}" class="{net}"/>'
+                        )
 
                 break  # 每个 pin 只处理第一条匹配的 line
 
-    # 插入桥接线段
+    # 插入远端桥接线段 (如有)
     if new_bridge_lines:
         bridge_block = "\n".join(new_bridge_lines)
         svg_text = svg_text.replace("</svg>", f"{bridge_block}\n</svg>")

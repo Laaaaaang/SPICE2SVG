@@ -679,7 +679,7 @@
   <line x1="771" x2="863" y1="259" y2="259" class="net_6"/>
   <circle cx="863" cy="259" r="2" style="fill:#000" class="net_6"/>
   <line x1="863" x2="863" y1="259" y2="279" class="net_6"/>
-  <line x1="863" x2="863" y1="236" y2="279" class="net_6"/>
+  <line x1="849" x2="849" y1="236" y2="279" class="net_6"/>
   <line x1="770" x2="770" y1="107" y2="152" class="net_8"/>
   <circle cx="770" cy="152" r="2" style="fill:#000" class="net_8"/>
   <line x1="770" x2="780" y1="152" y2="152" class="net_8"/>
@@ -694,16 +694,16 @@
   <line x1="780" x2="770" y1="152" y2="152" class="net_8"/>
   <circle cx="770" cy="152" r="2" style="fill:#000" class="net_8"/>
   <line x1="770" x2="770" y1="152" y2="209" class="net_8"/>
-  <line x1="862" x2="862" y1="177" y2="209" class="net_7"/>
+  <line x1="850" x2="850" y1="177" y2="209" class="net_7"/>
   <line x1="862" x2="862" y1="107" y2="127" class="net_30"/>
   <line x1="770" x2="770" y1="52" y2="57" class="net_31"/>
   <line x1="32" x2="32" y1="468" y2="498" class="net_32"/>
   <line x1="32" x2="32" y1="550" y2="560" class="net_9"/>
   <line x1="32" x2="296" y1="560" y2="560" class="net_9"/>
   <line x1="296" x2="296" y1="560" y2="650" class="net_9"/>
-  <line x1="296" x2="273" y1="650" y2="650" class="net_9"/>
+  <line x1="296" x2="259" y1="650" y2="650" class="net_9"/>
   <circle cx="32" cy="560" r="2" style="fill:#000" class="net_9"/>
-  <line x1="273" x2="273" y1="650" y2="623" class="net_9"/>
+  <line x1="259" x2="259" y1="650" y2="623" class="net_9"/>
   <line x1="32" x2="32" y1="550" y2="670" class="net_9"/>
   <line x1="32" x2="75" y1="670" y2="670" class="net_9"/>
   <line x1="75" x2="75" y1="670" y2="623" class="net_9"/>
@@ -712,8 +712,8 @@
   <line x1="74" x2="22" y1="570" y2="570" class="net_10"/>
   <line x1="22" x2="22" y1="570" y2="681" class="net_10"/>
   <line x1="352" x2="352" y1="792" y2="802" class="net_34"/>
-  <line x1="272" x2="272" y1="596" y2="570" class="net_11"/>
-  <line x1="272" x2="352" y1="570" y2="570" class="net_11"/>
+  <line x1="260" x2="260" y1="596" y2="570" class="net_11"/>
+  <line x1="260" x2="352" y1="570" y2="570" class="net_11"/>
   <line x1="352" x2="352" y1="570" y2="706" class="net_11"/>
   <circle cx="352" cy="706" r="2" style="fill:#000" class="net_11"/>
   <line x1="352" x2="388" y1="706" y2="706" class="net_11"/>
@@ -879,8 +879,6 @@
   <line x1="559" x2="559" y1="650" y2="706" class="net_20"/>
   <circle cx="497" cy="650" r="2" style="fill:#000" class="net_20"/>
   <line x1="559" x2="569" y1="706" y2="706" class="net_20"/>
-  <line x1="260" x2="272" y1="596" y2="596" class="net_11"/>
-  <line x1="259" x2="273" y1="623" y2="623" class="net_9"/>
-  <line x1="850" x2="862" y1="209" y2="209" class="net_7"/>
-  <line x1="849" x2="863" y1="236" y2="236" class="net_6"/>
+  <line x1="850" x2="862" y1="177" y2="177" class="net_7"/>
+  <line x1="849" x2="863" y1="279" y2="279" class="net_6"/>
 </svg>
