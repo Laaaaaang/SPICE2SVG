@@ -1,8 +1,8 @@
 """SVG 渲染主逻辑。
 
-两条路径:
+路径:
 - 完整路径: 执行生成的 SKiDL .py → 自动产生 SVG
-- 快捷路径: IR → JSON → netlistsvg → SVG
+- 快捷路径: IR → JSON → netlistsvg → SVG → 差分对后处理
 """
 
 from __future__ import annotations
@@ -16,6 +16,107 @@ from pathlib import Path
 from ..models import Circuit
 from .json_converter import circuit_to_netlistsvg_json
 from .skin import get_skin_path, get_default_skin_path
+
+
+# ---------------------------------------------------------------------------
+# 差分对 SVG 后处理所需数据
+# ---------------------------------------------------------------------------
+# 各类晶体管 skin 的正常方向 (base/gate-left) pin 坐标
+_TRANSISTOR_PINS: dict[str, dict] = {
+    "q_npn": {"width": 32, "pins": {"C": (22, 2), "B": (0, 16), "E": (23, 29)}},
+    "q_pnp": {"width": 32, "pins": {"C": (22, 2), "B": (0, 16), "E": (23, 29)}},
+    "nmos":  {"width": 32, "pins": {"D": (24, 0), "G": (0, 20), "S": (24, 40)}},
+    "pmos":  {"width": 32, "pins": {"S": (24, 0), "G": (0, 20), "D": (24, 40)}},
+}
+
+# normal → mirror 图形替换 (path d 属性, class 类别)
+_MIRROR_GRAPHICS: dict[str, dict[str, list[tuple[str, str]]]] = {
+    "q_npn": {
+        "normal": [
+            ("M0,16 H12 M12,6 V26",   "detail"),
+            ("m12,10 11,-8",           "detail"),
+            ("m12,21 11,8",            "detail"),
+            ("m23,29 -6,-1 3,-5 z",   "fill"),
+        ],
+        "mirror": [
+            ("M32,16 H20 M20,6 V26",  "detail"),
+            ("m20,10 -11,-8",          "detail"),
+            ("m20,21 -11,8",           "detail"),
+            ("m9,29 6,-1 -3,-5 z",    "fill"),
+        ],
+    },
+    "q_pnp": {
+        "normal": [
+            ("M0,16 H12 M12,6 V26",   "detail"),
+            ("m12,10 11,-8",           "detail"),
+            ("m12,21 11,8",            "detail"),
+            ("m14,9 6,-1 -3,-5 z",    "fill"),
+        ],
+        "mirror": [
+            ("M32,16 H20 M20,6 V26",  "detail"),
+            ("m20,10 -11,-8",          "detail"),
+            ("m20,21 -11,8",           "detail"),
+            ("m18,9 -6,-1 3,-5 z",    "fill"),
+        ],
+    },
+    "nmos": {
+        "normal": [
+            ("M0,20 H8",                                 "detail"),
+            ("M10,6 V34",                                 "detail"),
+            ("M14,6 V14 M14,18 V22 M14,26 V34",          "detail"),
+            ("M14,20 H24",                                "detail"),
+            ("m18,17 6,3 -6,3 z",                        "fill"),
+        ],
+        "mirror": [
+            ("M32,20 H24",                               "detail"),
+            ("M22,6 V34",                                 "detail"),
+            ("M18,6 V14 M18,18 V22 M18,26 V34",          "detail"),
+            ("M18,20 H8",                                 "detail"),
+            ("m14,17 -6,3 6,3 z",                        "fill"),
+        ],
+    },
+    "pmos": {
+        "normal": [
+            ("M0,20 H6",                                 "detail"),
+            ("M10,6 V34",                                 "detail"),
+            ("M14,6 V34",                                 "detail"),
+            ("M24,20 H14",                                "detail"),
+            ("m20,17 -6,3 6,3 z",                        "fill"),
+        ],
+        "mirror": [
+            ("M32,20 H26",                               "detail"),
+            ("M22,6 V34",                                 "detail"),
+            ("M18,6 V34",                                 "detail"),
+            ("M8,20 H18",                                 "detail"),
+            ("m12,17 6,3 -6,3 z",                        "fill"),
+        ],
+    },
+}
+
+# PMOS 额外元素: 反相小圆从左侧移到右侧
+_PMOS_BUBBLE_NORMAL = ("M0,20 H6", "detail")  # 已包含在 normal 中
+_PMOS_BUBBLE_MIRROR = ("M32,20 H26", "detail")
+# PMOS 反相气泡圆心: normal cx=8 → mirror cx=24
+_PMOS_CIRCLE_CX_NORMAL = 8
+_PMOS_CIRCLE_CX_MIRROR = 24
+
+# NMOS/PMOS 额外的 connect 类路径
+_NMOS_CONNECT_NORMAL = [
+    ("M14,10 H24 V0",  "connect"),
+    ("M14,30 H24 V40", "connect"),
+]
+_NMOS_CONNECT_MIRROR = [
+    ("M18,10 H8 V0",   "connect"),
+    ("M18,30 H8 V40",  "connect"),
+]
+_PMOS_CONNECT_NORMAL = [
+    ("M14,10 H24 V0",  "connect"),
+    ("M14,30 H24 V40", "connect"),
+]
+_PMOS_CONNECT_MIRROR = [
+    ("M18,10 H8 V0",   "connect"),
+    ("M18,30 H8 V40",  "connect"),
+]
 
 
 def _detect_skin_direction(skin_path: str | Path | None) -> str:
@@ -49,6 +150,15 @@ def _find_netlistsvg() -> str | None:
                         return str(candidate)
     except Exception:
         pass
+    # 常见全局安装位置 (conda base)
+    for base in [
+        Path(r"D:\ANANCONDA\Lib\site-packages\nodejs_wheel"),
+        Path.home() / "AppData" / "Roaming" / "npm",
+    ]:
+        for name in ("netlistsvg.cmd", "netlistsvg"):
+            candidate = base / name
+            if candidate.exists():
+                return str(candidate)
     return None
 
 
@@ -75,9 +185,202 @@ def render_svg_via_skidl(skidl_code: str, output_dir: Path) -> Path:
     raise FileNotFoundError("SKiDL 未生成 SVG 文件")
 
 
+def _skin_to_lookup(skin_type: str) -> str | None:
+    """将 SVG 中的 skin type 名映射到 _TRANSISTOR_PINS 的查找 key。"""
+    for key in ("npn", "pnp", "nmos", "pmos"):
+        if key in skin_type:
+            prefix = "q_" if key in ("npn", "pnp") else ""
+            return f"{prefix}{key}"
+    return None
+
+
+def _mirror_diff_pairs_in_svg(
+    svg_text: str,
+    diff_pair_refs: list[tuple[str, str]],
+) -> str:
+    """SVG 后处理: 将差分对右侧成员的晶体管符号水平镜像, 使基极/栅极向外。
+
+    所有差分对成员在 JSON 中使用相同的 normal skin (base/gate-left)。
+    渲染后, 右侧成员通过此函数被镜像为 base/gate-right, 并添加
+    桥接线段保持连线连续性。
+
+    Args:
+        svg_text: netlistsvg 生成的 SVG 文本
+        diff_pair_refs: 差分对列表, 每项 (ref_a, ref_b)
+    """
+    if not diff_pair_refs:
+        return svg_text
+
+    # ---- 解析 cell 位置 ----
+    cell_info: dict[str, dict] = {}
+    for m in re.finditer(
+        r'<g\s+s:type="(\w+)"\s+s:width="(\d+)"\s+s:height="(\d+)"\s+'
+        r'transform="translate\((\d+),(\d+)\)"\s+id="cell_(\w+)"',
+        svg_text,
+    ):
+        cell_info[m.group(6)] = {
+            "x": int(m.group(4)),
+            "y": int(m.group(5)),
+            "type": m.group(1),
+            "width": int(m.group(2)),
+        }
+
+    # ---- 确定右侧成员 ----
+    refs_to_mirror: set[str] = set()
+    for ref_a, ref_b in diff_pair_refs:
+        if ref_a not in cell_info or ref_b not in cell_info:
+            continue
+        if cell_info[ref_a]["x"] > cell_info[ref_b]["x"]:
+            refs_to_mirror.add(ref_a)
+        else:
+            refs_to_mirror.add(ref_b)
+
+    if not refs_to_mirror:
+        return svg_text
+
+    # ---- 修改连线端点 + 添加桥接线 ----
+    new_bridge_lines: list[str] = []
+
+    for ref in refs_to_mirror:
+        info = cell_info[ref]
+        cx, cy = info["x"], info["y"]
+        width = info["width"]
+
+        lookup = _skin_to_lookup(info["type"])
+        if not lookup or lookup not in _TRANSISTOR_PINS:
+            continue
+
+        pin_data = _TRANSISTOR_PINS[lookup]
+
+        for pin_name, (orig_px, orig_py) in pin_data["pins"].items():
+            new_px = width - orig_px
+            if orig_px == new_px:
+                continue
+
+            orig_gx = cx + orig_px
+            new_gx = cx + new_px
+            gy = cy + orig_py
+            is_lateral = pin_name in ("B", "G")
+
+            # 找到连接到 pin 的第一条 line
+            pat = re.compile(
+                r'<line x1="(\d+)" x2="(\d+)" '
+                r'y1="(\d+)" y2="(\d+)" '
+                r'class="(net_\d+)"/?>'
+            )
+
+            for m in pat.finditer(svg_text):
+                x1 = int(m.group(1))
+                x2 = int(m.group(2))
+                y1 = int(m.group(3))
+                y2 = int(m.group(4))
+                net = m.group(5)
+
+                ep = 0
+                if x1 == orig_gx and y1 == gy:
+                    ep = 1
+                elif x2 == orig_gx and y2 == gy:
+                    ep = 2
+                else:
+                    continue
+
+                was_vertical = (x1 == x2)
+
+                if is_lateral or not was_vertical:
+                    # 横向 pin (B/G) 或非垂直线: 直接移动端点
+                    if ep == 1:
+                        new_line = (
+                            f'<line x1="{new_gx}" x2="{x2}" '
+                            f'y1="{gy}" y2="{y2}" class="{net}"/>'
+                        )
+                    else:
+                        new_line = (
+                            f'<line x1="{x1}" x2="{new_gx}" '
+                            f'y1="{y1}" y2="{gy}" class="{net}"/>'
+                        )
+                    svg_text = svg_text[:m.start()] + new_line + svg_text[m.end():]
+                else:
+                    # 垂直线: 保持原线不变, 添加水平桥接
+                    new_bridge_lines.append(
+                        f'  <line x1="{new_gx}" x2="{orig_gx}" '
+                        f'y1="{gy}" y2="{gy}" class="{net}"/>'
+                    )
+
+                break  # 每个 pin 只处理第一条匹配的 line
+
+    # 插入桥接线段
+    if new_bridge_lines:
+        bridge_block = "\n".join(new_bridge_lines)
+        svg_text = svg_text.replace("</svg>", f"{bridge_block}\n</svg>")
+
+    # ---- 替换 cell 内图形 ----
+    for ref in refs_to_mirror:
+        info = cell_info[ref]
+        lookup = _skin_to_lookup(info["type"])
+        if not lookup:
+            continue
+
+        cell_class = f"cell_{ref}"
+
+        # 主要图形 (detail / fill 类路径)
+        gfx = _MIRROR_GRAPHICS.get(lookup)
+        if gfx:
+            for (norm_d, norm_cls), (mirr_d, _) in zip(
+                gfx["normal"], gfx["mirror"]
+            ):
+                if norm_cls == "detail":
+                    old = f'<path d="{norm_d}" class="detail {cell_class}"'
+                    new = f'<path d="{mirr_d}" class="detail {cell_class}"'
+                else:  # fill (arrow)
+                    old = (
+                        f'<path d="{norm_d}" style="fill:#000" '
+                        f'class="{cell_class}"'
+                    )
+                    new = (
+                        f'<path d="{mirr_d}" style="fill:#000" '
+                        f'class="{cell_class}"'
+                    )
+                svg_text = svg_text.replace(old, new, 1)
+
+        # NMOS/PMOS connect 类路径
+        if lookup == "nmos":
+            for (norm_d, _), (mirr_d, _) in zip(
+                _NMOS_CONNECT_NORMAL, _NMOS_CONNECT_MIRROR
+            ):
+                old = f'<path d="{norm_d}" class="connect {cell_class}"'
+                new = f'<path d="{mirr_d}" class="connect {cell_class}"'
+                svg_text = svg_text.replace(old, new, 1)
+
+        elif lookup == "pmos":
+            for (norm_d, _), (mirr_d, _) in zip(
+                _PMOS_CONNECT_NORMAL, _PMOS_CONNECT_MIRROR
+            ):
+                old = f'<path d="{norm_d}" class="connect {cell_class}"'
+                new = f'<path d="{mirr_d}" class="connect {cell_class}"'
+                svg_text = svg_text.replace(old, new, 1)
+
+            # PMOS 反相气泡圆心
+            old_circle = (
+                f'<circle cx="{_PMOS_CIRCLE_CX_NORMAL}" cy="20" r="2" '
+                f'class="symbol {cell_class}"'
+            )
+            new_circle = (
+                f'<circle cx="{_PMOS_CIRCLE_CX_MIRROR}" cy="20" r="2" '
+                f'class="symbol {cell_class}"'
+            )
+            svg_text = svg_text.replace(old_circle, new_circle, 1)
+
+    return svg_text
+
+
 def render_svg_direct(circuit: Circuit, output_path: Path,
                       skin: str | None = None) -> Path:
-    """IR → JSON → netlistsvg → SVG（快捷路径）。"""
+    """IR → JSON → netlistsvg → SVG → 差分对后处理（快捷路径）。
+
+    差分对成员使用相同的 normal skin (base/gate-left) 渲染,
+    渲染后通过 SVG 后处理将右侧成员镜像为 base/gate-right,
+    实现基极/栅极向外。
+    """
     netlistsvg = _find_netlistsvg()
     if not netlistsvg:
         raise RuntimeError(
@@ -100,24 +403,38 @@ def render_svg_direct(circuit: Circuit, output_path: Path,
     # 从 skin 文件检测布局方向, 传给 converter
     direction = _detect_skin_direction(skin_file)
 
-    json_data = circuit_to_netlistsvg_json(circuit, direction=direction)
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-
     json_path = output_path.with_suffix(".json")
-    json_path.write_text(
-        json.dumps(json_data, indent=2, ensure_ascii=False), encoding="utf-8",
+
+    # ---- 生成 JSON (所有差分对成员使用 normal skin) ----
+    json_data, diff_pair_refs = circuit_to_netlistsvg_json(
+        circuit, direction=direction,
     )
 
+    json_path.write_text(
+        json.dumps(json_data, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    # ---- 调用 netlistsvg 渲染 ----
     cmd: list[str] = [netlistsvg, str(json_path), "-o", str(output_path)]
     if skin_file:
         cmd.extend(["--skin", skin_file])
-
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
     if result.returncode != 0:
         raise RuntimeError(
-            f"netlistsvg 执行失败:\nstdout: {result.stdout}\nstderr: {result.stderr}"
+            f"netlistsvg 执行失败:\nstdout: {result.stdout}\n"
+            f"stderr: {result.stderr}"
         )
+
     if not output_path.exists():
         raise FileNotFoundError(f"netlistsvg 未生成 SVG: {output_path}")
+
+    # ---- SVG 后处理: 镜像差分对右侧成员使基极/栅极向外 ----
+    if diff_pair_refs:
+        svg_text = output_path.read_text(encoding="utf-8")
+        svg_text = _mirror_diff_pairs_in_svg(svg_text, diff_pair_refs)
+        output_path.write_text(svg_text, encoding="utf-8")
+
     return output_path

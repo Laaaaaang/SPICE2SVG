@@ -106,18 +106,18 @@
             "B": "output"
           }
         },
-        "Q1": {
-          "type": "q_npn_ml",
+        "Q2": {
+          "type": "q_npn",
           "attributes": {
             "value": "QNPN",
-            "ref": "Q1"
+            "ref": "Q2"
           },
           "connections": {
             "C": [
-              6
+              8
             ],
             "B": [
-              5
+              4
             ],
             "E": [
               7
@@ -129,18 +129,18 @@
             "E": "output"
           }
         },
-        "Q2": {
-          "type": "q_npn_m",
+        "Q1": {
+          "type": "q_npn",
           "attributes": {
             "value": "QNPN",
-            "ref": "Q2"
+            "ref": "Q1"
           },
           "connections": {
             "C": [
-              8
+              6
             ],
             "B": [
-              4
+              5
             ],
             "E": [
               7

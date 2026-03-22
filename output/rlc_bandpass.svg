@@ -28,7 +28,7 @@
     stroke-linejoin: round;
     stroke-linecap: round;
     fill: #000;
-  }</style>
+  }</style>
   <g s:type="resistor_v" s:width="10" s:height="50" transform="translate(77,47)" id="cell_R1">
     <s:alias val="r_v"/>
     <text x="15" y="15" s:attribute="ref" class="cell_R1">R1</text>

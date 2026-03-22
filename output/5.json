@@ -167,18 +167,18 @@
             "-": "output"
           }
         },
-        "Q1": {
-          "type": "q_npn_ml",
+        "Q2": {
+          "type": "q_npn",
           "attributes": {
             "value": "NPN_IN",
-            "ref": "Q1"
+            "ref": "Q2"
           },
           "connections": {
             "C": [
-              7
+              8
             ],
             "B": [
-              2
+              3
             ],
             "E": [
               6
@@ -190,18 +190,18 @@
             "E": "output"
           }
         },
-        "Q2": {
-          "type": "q_npn_m",
+        "Q1": {
+          "type": "q_npn",
           "attributes": {
             "value": "NPN_IN",
-            "ref": "Q2"
+            "ref": "Q1"
           },
           "connections": {
             "C": [
-              8
+              7
             ],
             "B": [
-              3
+              2
             ],
             "E": [
               6
@@ -312,18 +312,18 @@
             "-": "output"
           }
         },
-        "Q3": {
-          "type": "q_pnp_ml",
+        "Q4": {
+          "type": "q_pnp",
           "attributes": {
             "value": "PNP_IN",
-            "ref": "Q3"
+            "ref": "Q4"
           },
           "connections": {
             "C": [
-              10
+              11
             ],
             "B": [
-              4
+              5
             ],
             "E": [
               9
@@ -335,18 +335,18 @@
             "E": "input"
           }
         },
-        "Q4": {
-          "type": "q_pnp_m",
+        "Q3": {
+          "type": "q_pnp",
           "attributes": {
             "value": "PNP_IN",
-            "ref": "Q4"
+            "ref": "Q3"
           },
           "connections": {
             "C": [
-              11
+              10
             ],
             "B": [
-              5
+              4
             ],
             "E": [
               9

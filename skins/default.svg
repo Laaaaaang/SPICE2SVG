@@ -382,4 +382,76 @@ text {
   </g>
 </g>
 
+<!-- ============================================================ -->
+<!-- DIFF-PAIR DEDICATED: base-right WITHOUT s:dir override       -->
+<!-- Used for diff pair right member so ELK respects JSON order   -->
+<!-- ============================================================ -->
+
+<!-- BJT: NPN diff-pair right (base right, no s:dir) -->
+<g s:type="transistor_npn_dfr" s:width="32" s:height="32" transform="translate(50,630)">
+  <s:alias val="q_npn_dfr"/>
+  <text x="-3" y="10" s:attribute="ref" class="$cell_id">Q</text>
+  <text x="-3" y="25" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="16" cy="16" class="symbol $cell_id"/>
+  <path d="M32,16 H20 M20,6 V26" class="detail $cell_id"/>
+  <path d="m20,10 -11,-8" class="detail $cell_id"/>
+  <path d="m20,21 -11,8" class="detail $cell_id"/>
+  <path d="m9,29 6,-1 -3,-5 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="10" s:y="2" s:pid="C" s:position="top"/>
+  <g s:x="32" s:y="16" s:pid="B" s:position="right"/>
+  <g s:x="9" s:y="29" s:pid="E" s:position="bottom"/>
+</g>
+
+<!-- BJT: PNP diff-pair right (base right, no s:dir) -->
+<g s:type="transistor_pnp_dfr" s:width="32" s:height="32" transform="translate(120,630)">
+  <s:alias val="q_pnp_dfr"/>
+  <text x="-3" y="10" s:attribute="ref" class="$cell_id">Q</text>
+  <text x="-3" y="25" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="16" cy="16" class="symbol $cell_id"/>
+  <path d="M32,16 H20 M20,6 V26" class="detail $cell_id"/>
+  <path d="m20,10 -11,-8" class="detail $cell_id"/>
+  <path d="m20,21 -11,8" class="detail $cell_id"/>
+  <path d="m18,9 -6,-1 3,-5 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="10" s:y="2" s:pid="C" s:position="top"/>
+  <g s:x="32" s:y="16" s:pid="B" s:position="right"/>
+  <g s:x="9" s:y="29" s:pid="E" s:position="bottom"/>
+</g>
+
+<!-- MOSFET: NMOS diff-pair right (gate right, no s:dir) -->
+<g s:type="nmos_dfr" s:width="32" s:height="40" transform="translate(50,680)">
+  <s:alias val="nmos_dfr"/>
+  <text x="-3" y="12" s:attribute="ref" class="$cell_id">M</text>
+  <text x="-3" y="28" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="14" cy="20" class="symbol $cell_id"/>
+  <path d="M32,20 H24" class="detail $cell_id"/>
+  <path d="M22,6 V34" class="detail $cell_id"/>
+  <path d="M18,6 V14 M18,18 V22 M18,26 V34" class="detail $cell_id"/>
+  <path d="M18,10 H8 V0" class="connect $cell_id"/>
+  <path d="M18,30 H8 V40" class="connect $cell_id"/>
+  <path d="M18,20 H8" class="detail $cell_id"/>
+  <path d="m14,17 -6,3 6,3 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="8" s:y="0" s:pid="D" s:position="top"/>
+  <g s:x="32" s:y="20" s:pid="G" s:position="right"/>
+  <g s:x="8" s:y="40" s:pid="S" s:position="bottom"/>
+</g>
+
+<!-- MOSFET: PMOS diff-pair right (gate right, no s:dir) -->
+<g s:type="pmos_dfr" s:width="32" s:height="40" transform="translate(120,680)">
+  <s:alias val="pmos_dfr"/>
+  <text x="-3" y="12" s:attribute="ref" class="$cell_id">M</text>
+  <text x="-3" y="28" s:attribute="value" class="$cell_id">val</text>
+  <circle r="16" cx="14" cy="20" class="symbol $cell_id"/>
+  <path d="M32,20 H26" class="detail $cell_id"/>
+  <circle cx="24" cy="20" r="2" class="symbol $cell_id"/>
+  <path d="M22,6 V34" class="detail $cell_id"/>
+  <path d="M18,6 V34" class="detail $cell_id"/>
+  <path d="M18,10 H8 V0" class="connect $cell_id"/>
+  <path d="M18,30 H8 V40" class="connect $cell_id"/>
+  <path d="M8,20 H18" class="detail $cell_id"/>
+  <path d="m12,17 6,3 -6,3 z" style="fill:#000" class="$cell_id"/>
+  <g s:x="8" s:y="0" s:pid="S" s:position="top"/>
+  <g s:x="32" s:y="20" s:pid="G" s:position="right"/>
+  <g s:x="8" s:y="40" s:pid="D" s:position="bottom"/>
+</g>
+
 </svg>

@@ -68,6 +68,11 @@ _SKIN_TYPE: dict[str, str] = {
     "Q_PNP_ML":  "q_pnp_ml",
     "M_NMOS_ML": "nmos_ml",
     "M_PMOS_ML": "pmos_ml",
+    # 差分对右侧 (base/gate 在右, 无 s:dir 覆盖, 不干扰 ELK 排列)
+    "Q_NPN_DFR":  "q_npn_dfr",
+    "Q_PNP_DFR":  "q_pnp_dfr",
+    "M_NMOS_DFR": "nmos_dfr",
+    "M_PMOS_DFR": "pmos_dfr",
 }
 
 # ELK 端口方向 (DOWN 布局: "input"→上层, "output"→下层)
@@ -101,6 +106,11 @@ _PORT_DIR: dict[str, dict[str, str]] = {
     "Q_PNP_ML":  {"C": "output", "B": "input",  "E": "input"},
     "M_NMOS_ML": {"D": "input",  "G": "input",  "S": "output"},
     "M_PMOS_ML": {"D": "output", "G": "input",  "S": "input"},
+    # 差分对右侧 — 端口方向同普通
+    "Q_NPN_DFR":  {"C": "input",  "B": "input",  "E": "output"},
+    "Q_PNP_DFR":  {"C": "output", "B": "input",  "E": "input"},
+    "M_NMOS_DFR": {"D": "input",  "G": "input",  "S": "output"},
+    "M_PMOS_DFR": {"D": "output", "G": "input",  "S": "input"},
 }
 
 # ---------------------------------------------------------------------------
@@ -207,6 +217,7 @@ class SymmetricPair:
     left: str       # 左侧 ref (普通符号, gate/base 在左)
     right: str      # 右侧 ref (镜像符号, gate/base 在右)
     kind: str       # "diff_pair" | "current_mirror" | "complementary_pair"
+    inward: bool = False  # diff_pair 专用: True = 基极/栅极向内 (left→_M, right→_ML)
 
 
 def _detect_symmetric_pairs(
@@ -305,6 +316,76 @@ def _reorder_components(
     return ordered
 
 
+# ---------------------------------------------------------------------------
+# 差分对基极方向优化 — 4 种配置 (左右 × 内外) 取交叉最少
+# ---------------------------------------------------------------------------
+
+def _count_wire_crossings(wires: list[tuple[float, float]]) -> int:
+    """计算导线交叉数 (逆序对)。wire = (source_x, target_x)。"""
+    n = len(wires)
+    count = 0
+    for i in range(n):
+        for j in range(i + 1, n):
+            si, ti = wires[i]
+            sj, tj = wires[j]
+            # 两条线的起点顺序与终点顺序相反 → 交叉
+            if (si - sj) * (ti - tj) < 0:
+                count += 1
+    return count
+
+
+def _optimize_diff_pairs(
+    pairs: list[SymmetricPair],
+    all_comps: list[Component],
+    circuit: Circuit,
+) -> list[SymmetricPair]:
+    """预测 ELK 视觉排列, 调整差分对 left/right 使基极向外。
+
+    ELK layered 算法会在同层内重排节点以最小化交叉。实测发现:
+    collector/drain 网络外部连接数较多的那个晶体管会被 ELK 放到左侧。
+    因此将该晶体管设为 SymmetricPair.left (获得普通 skin, base-left),
+    另一个设为 right (获得 _DFR skin, base-right), 使基极自然向外。
+    """
+    comp_map = {c.ref: c for c in all_comps}
+
+    def _ext_conn_count(net_name: str, exclude: set[str]) -> int:
+        count = 0
+        for comp in all_comps:
+            if comp.ref in exclude:
+                continue
+            for pin in comp.pins:
+                if pin.net_name == net_name:
+                    count += 1
+                    break
+        return count
+
+    result: list[SymmetricPair] = []
+    for p in pairs:
+        if p.kind != "diff_pair":
+            result.append(p)
+            continue
+
+        c1 = comp_map.get(p.left)
+        c2 = comp_map.get(p.right)
+        if not c1 or not c2 or len(c1.pins) < 3 or len(c2.pins) < 3:
+            result.append(p)
+            continue
+
+        exclude = {c1.ref, c2.ref}
+        c1_ext = _ext_conn_count(c1.pins[0].net_name, exclude)
+        c2_ext = _ext_conn_count(c2.pins[0].net_name, exclude)
+
+        if c2_ext > c1_ext:
+            # c2 的 C/D 外部连接更多 → ELK 会把 c2 放左边
+            # 将 c2 设为 left (获得 base-left = 向外)
+            result.append(SymmetricPair(c2.ref, c1.ref, "diff_pair"))
+        else:
+            # 保持原序 (c1 左, c2 右)
+            result.append(SymmetricPair(c1.ref, c2.ref, "diff_pair"))
+
+    return result
+
+
 def _detect_complementary_pairs(
     components: list[Component],
     circuit: Circuit,
@@ -387,12 +468,17 @@ def _detect_complementary_pairs(
 # 主转换
 # ---------------------------------------------------------------------------
 
-def circuit_to_netlistsvg_json(circuit: Circuit, *, direction: str = "DOWN") -> dict:
+def circuit_to_netlistsvg_json(
+    circuit: Circuit, *,
+    direction: str = "DOWN",
+) -> tuple[dict, list[tuple[str, str]]]:
     """将 Circuit IR 转换为 netlistsvg analog 兼容 JSON dict。
 
-    Args:
-        circuit: 电路 IR
-        direction: ELK 布局方向 ("DOWN" 或 "RIGHT")
+    Returns:
+        (json_data, diff_pair_refs):
+            json_data — netlistsvg 兼容的 JSON dict
+            diff_pair_refs — 差分对列表 [(ref_a, ref_b), ...],
+                用于 SVG 后处理时镜像右侧成员的晶体管符号
     """
     dir_table = _PORT_DIR
 
@@ -431,6 +517,9 @@ def circuit_to_netlistsvg_json(circuit: Circuit, *, direction: str = "DOWN") -> 
                     if c.ref not in power_v_refs]
     sym_pairs = _detect_symmetric_pairs(active_comps, circuit)
 
+    # 差分对基极方向优化: 预测 ELK 视觉顺序, 调整 left/right
+    sym_pairs = _optimize_diff_pairs(sym_pairs, active_comps, circuit)
+
     # 互补推挽对检测 (NPN+PNP / NMOS+PMOS, 两者 C/D→电源, E/S→负载)
     _used_in_pairs = {p.left for p in sym_pairs} | {p.right for p in sym_pairs}
     sym_pairs.extend(_detect_complementary_pairs(
@@ -439,10 +528,18 @@ def circuit_to_netlistsvg_json(circuit: Circuit, *, direction: str = "DOWN") -> 
         _used_in_pairs))
 
     # 互补对不加 _ML/_M 后缀 (NPN 与 PNP 天然互补, 保持各自正常符号)
+    # 差分对: 全部使用 normal skin (base-left), 由 SVG 后处理镜像右侧
+    # 电流镜: left→_ML, right→_M (保持 s:dir 以消除层间约束)
+    diff_pair_refs: list[tuple[str, str]] = []
     mirrored_refs: set[str] = set()
     mirror_left_refs: set[str] = set()
     for p in sym_pairs:
-        if p.kind != "complementary_pair":
+        if p.kind == "complementary_pair":
+            continue
+        if p.kind == "diff_pair":
+            diff_pair_refs.append((p.left, p.right))
+        else:
+            # current_mirror: 保持 _ML/_M 以利用 s:dir="output"
             mirrored_refs.add(p.right)
             mirror_left_refs.add(p.left)
 
@@ -476,12 +573,14 @@ def circuit_to_netlistsvg_json(circuit: Circuit, *, direction: str = "DOWN") -> 
         elif comp.ref in mirror_left_refs:
             skin_key = skin_key + "_ML"
         skin_type = _SKIN_TYPE.get(skin_key, skin_key.lower())
+        # 剥离镜像/差分后缀回退到基础 key (Q_NPN_DFR → Q_NPN)
+        base_key = skin_key
+        for _sfx in ("_DFR", "_M", "_ML"):
+            base_key = base_key.removesuffix(_sfx)
         pin_map = _PIN_MAP.get(skin_key, _PIN_MAP.get(
-            skin_key.removesuffix("_M").removesuffix("_ML"),
-            _PIN_MAP.get(comp.type, {})))
+            base_key, _PIN_MAP.get(comp.type, {})))
         port_dirs = dir_table.get(skin_key, dir_table.get(
-            skin_key.removesuffix("_M").removesuffix("_ML"),
-            dir_table.get(comp.type, {})))
+            base_key, dir_table.get(comp.type, {})))
 
         connections: dict[str, list[int]] = {}
         port_directions: dict[str, str] = {}
@@ -620,10 +719,10 @@ def circuit_to_netlistsvg_json(circuit: Circuit, *, direction: str = "DOWN") -> 
         direction = net.direction if net.direction != "inout" else "input"
         ports[net.name] = {"bits": [bit], "direction": direction}
 
-    return {"modules": {"": {"cells": cells, "ports": ports}}}
+    return {"modules": {"": {"cells": cells, "ports": ports}}}, diff_pair_refs
 
 
 def circuit_to_json_string(circuit: Circuit, indent: int = 2,
                            *, direction: str = "DOWN") -> str:
-    data = circuit_to_netlistsvg_json(circuit, direction=direction)
+    data, _ = circuit_to_netlistsvg_json(circuit, direction=direction)
     return json.dumps(data, indent=indent, ensure_ascii=False)
