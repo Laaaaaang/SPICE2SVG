@@ -15,6 +15,24 @@ Initial rendering result generated from `examples/1.cir`:
 
 ![SPICE2SVG preview](docs/images/overview_1.svg)
 
+## Motivation
+
+Today, many LLMs can already generate SPICE-style netlists that are syntactically correct or close to correct. However, beginners often struggle to understand the connection structure encoded in a netlist, especially in analog circuits where topology matters more than isolated devices.
+
+This creates a communication gap:
+
+- natural-language intent is translated into a netlist
+- the netlist is hard for learners to inspect visually
+- topology-level meaning is easily lost or distorted during explanation and iteration
+
+SPICE2SVG is designed as a demo tool to support **LLM-assisted learning and simple analog circuit design**. Its purpose is to make the structure inside a generated netlist visible again, so that learners can move back and forth between:
+
+- natural-language descriptions
+- SPICE netlists
+- schematic-style visualizations
+
+In that sense, the project helps close the loop from **natural language -> schematic/netlist -> visual understanding**, which is especially useful for teaching, guided exploration, and rapid prototyping of simple analog circuits.
+
 ## Overview
 
 SPICE netlists are compact and simulation-friendly, but they are difficult to read as diagrams. SPICE2SVG reconstructs enough structure from raw netlists to generate readable schematics automatically.
