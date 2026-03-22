@@ -39,7 +39,7 @@ _MIRROR_GRAPHICS: dict[str, dict[str, list[tuple[str, str]]]] = {
             ("m23,29 -6,-1 3,-5 z",   "fill"),
         ],
         "mirror": [
-            ("M32,16 H20 M20,6 V26",  "detail"),
+            ("M0,16 H20 M20,6 V26",   "detail"),
             ("m20,10 -11,-8",          "detail"),
             ("m20,21 -11,8",           "detail"),
             ("m9,29 6,-1 -3,-5 z",    "fill"),
@@ -53,7 +53,7 @@ _MIRROR_GRAPHICS: dict[str, dict[str, list[tuple[str, str]]]] = {
             ("m14,9 6,-1 -3,-5 z",    "fill"),
         ],
         "mirror": [
-            ("M32,16 H20 M20,6 V26",  "detail"),
+            ("M0,16 H20 M20,6 V26",   "detail"),
             ("m20,10 -11,-8",          "detail"),
             ("m20,21 -11,8",           "detail"),
             ("m18,9 -6,-1 3,-5 z",    "fill"),
@@ -255,6 +255,10 @@ def _mirror_diff_pairs_in_svg(
         for pin_name, (orig_px, orig_py) in pin_data["pins"].items():
             new_px = width - orig_px
             if orig_px == new_px:
+                continue
+
+            # BJT 基极: 镜像图形从 x=0 延伸到竖条, 外部连线无需移动
+            if pin_name == "B" and lookup in ("q_npn", "q_pnp"):
                 continue
 
             orig_gx = cx + orig_px
