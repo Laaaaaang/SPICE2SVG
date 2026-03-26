@@ -1,5 +1,52 @@
 # SPICE2SVG
 
+**SPICE 网表 → 自动分组 → 超节点原理图**
+
+SPICE2SVG 能够将 SPICE 网表自动转换为可读的原理图 SVG。核心亮点是 **超节点（Supernode）识别与分块绘制**：系统自动识别差分对、电流镜、推挽输出级等 15+ 种模拟电路拓扑，将匹配的晶体管组折叠为带有内部原理图细节的独立块（block），再与外围元件一起进行布局渲染。
+
+### ✨ 最新成果：超节点分块渲染
+
+> **自动拓扑识别** → 将匹配的多管结构折叠为超节点块  
+> **块内原理图** → 每个超节点块内绘制完整的晶体管级电路符号  
+> **端口对齐** → 块的外部端口与 netlistsvg 布局引擎精确对接  
+> **电源显式连接** → 推挽级的 VCC/VEE、镜像参考节点均正确暴露
+
+#### 支持的超节点类型
+
+| 分类 | 拓扑 |
+|------|------|
+| 差分对 | NPN / PNP / NMOS / PMOS |
+| 电流镜 | NPN / PNP / NMOS / PMOS |
+| 交叉耦合对 | NPN / NMOS |
+| 共源共栅 | NPN / PNP / NMOS / PMOS |
+| Darlington | NPN / PNP |
+| Sziklai 互补对 | NPN+PNP |
+| Vbe 乘法器 | NPN+R1+R2 |
+| 推挽输出 | BJT / MOS |
+| Wilson 电流镜 | NPN |
+| 差分对+有源负载 | NPN+PNP / PNP+NPN |
+
+#### 渲染示例
+
+`examples/1.cir` — 差分输入 + PNP 有源负载 + VAS + Vbe 偏置 + 推挽输出 + 全局负反馈：
+
+![Supernode rendering - example 1](docs/images/supernode_1.svg)
+
+`examples/5.cir` — 双差分输入 + 双 VAS + Vbe 乘法器 + 驱动级 + 推挽输出级：
+
+![Supernode rendering - example 5](docs/images/supernode_5.svg)
+
+#### 使用方法
+
+```bash
+# 启用超节点识别
+spice2svg convert examples/1.cir -o output/ --direct --supernodes
+```
+
+---
+
+## Overview
+
 SPICE2SVG is a Python toolkit for converting SPICE netlists into structured circuit representations and schematic SVGs.
 
 It supports two end-to-end pipelines:
@@ -9,9 +56,7 @@ It supports two end-to-end pipelines:
 
 This repository focuses on the algorithmic part of the system: parsing, intermediate representation design, topology recognition, and layout-aware rendering heuristics.
 
-## Preview
-
-Initial rendering result generated from `examples/1.cir`:
+### Basic rendering (without supernodes)
 
 ![SPICE2SVG preview](docs/images/overview_1.svg)
 
@@ -41,9 +86,13 @@ SPICE netlists are compact and simulation-friendly, but they are difficult to re
 SPICE text
    |
    v
-Tokenizer -> Parser -> Circuit IR -> Generator -> SKiDL Python -> SVG
-                           |
-                           +-> JSON Converter -> netlistsvg -> SVG
+Tokenizer -> Parser -> Circuit IR -> Recognizer -> Supernodes
+                           |              |            |
+                           |              v            v
+                           |         JSON Converter -> netlistsvg -> SVG
+                           |                  (with supernode cells & skins)
+                           v
+                       Generator -> SKiDL Python -> SVG
 ```
 
 ## Core capabilities
@@ -99,6 +148,13 @@ Because of this design, the layout algorithm is extensible: new block recognizer
 - `svg_renderer.py`: direct renderer and SKiDL fallback orchestration
 - `skin.py`: skin resolution and skin listing
 
+### `src/spice2svg/recognizer`
+
+- `pattern_def.py`: declarative pattern definition DSL (roles, constraints, external ports)
+- `patterns.py`: 15+ analog topology pattern definitions
+- `engine.py`: constraint-based matching engine and supernode builder
+- `supernode.py`: supernode data model (ref, skin type, ports, internal nets)
+
 ### `src/spice2svg/pipeline.py`
 
 - orchestrates parsing, code generation, JSON export, and SVG rendering
@@ -126,16 +182,20 @@ This enables symbol-aware rendering and directed layout.
 
 The converter splits signal nets from power nets and emits dedicated one-pin power cells for each local power connection. This reduces long global wires and improves analog readability.
 
-### 3. Topology recognition
+### 3. Topology recognition and supernode folding
 
-The current implementation recognizes and groups:
+The recognizer module uses a declarative constraint-based pattern matching engine to identify analog building blocks:
 
-- differential pairs
-- current mirrors
-- complementary driver pairs
-- complementary push-pull output pairs
+- differential pairs (NPN/PNP/NMOS/PMOS)
+- current mirrors (NPN/PNP/NMOS/PMOS)
+- cross-coupled pairs, cascode stacks
+- Darlington pairs, Sziklai complementary pairs
+- Vbe multiplier bias circuits
+- complementary push-pull output stages (BJT/MOS)
+- Wilson current mirrors
+- differential pairs with active loads (4-transistor blocks)
 
-Recognized blocks are reordered before layout so the graph passed into ELK already carries analog structure.
+Recognized blocks are folded into **supernodes** — single cells with dedicated schematic-style SVG skins that show internal transistor-level detail while maintaining clean external port connections to the rest of the circuit.
 
 ### 4. Symbol policy layer
 
@@ -227,6 +287,7 @@ src/spice2svg/
   models/
   generator/
   renderer/
+  recognizer/
 tests/
 examples/
 skins/
