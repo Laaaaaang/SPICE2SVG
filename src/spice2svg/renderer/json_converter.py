@@ -722,7 +722,333 @@ def circuit_to_netlistsvg_json(
     return {"modules": {"": {"cells": cells, "ports": ports}}}, diff_pair_refs
 
 
+# ---------------------------------------------------------------------------
+# 超节点模式: 将识别出的超节点折叠为单个 cell
+# ---------------------------------------------------------------------------
+
+def circuit_to_netlistsvg_json_with_supernodes(
+    circuit: Circuit,
+    supernodes: list,
+    *,
+    direction: str = "DOWN",
+) -> tuple[dict, list[tuple[str, str]]]:
+    """带超节点支持的 JSON 转换。
+
+    与 circuit_to_netlistsvg_json 相同的逻辑, 但:
+    1. 属于超节点的元件不再作为独立 cell 输出
+    2. 每个超节点作为单个 cell 输出, 使用自定义 skin_type
+    3. 超节点的内部网络不分配 bit 编号 (被吸收)
+
+    Args:
+        circuit: 电路 IR
+        supernodes: 超节点列表 (来自 recognizer.recognize_supernodes)
+        direction: 布局方向
+
+    Returns:
+        (json_data, diff_pair_refs) — 与 circuit_to_netlistsvg_json 相同格式
+    """
+    from ..recognizer.supernode import SuperNode
+
+    if not supernodes:
+        return circuit_to_netlistsvg_json(circuit, direction=direction)
+
+    # 构建超节点成员查找表
+    ref_to_supernode: dict[str, SuperNode] = {}
+    for sn in supernodes:
+        for ref in sn.component_refs:
+            ref_to_supernode[ref] = sn
+
+    # 收集所有内部网络 (不分配 bit)
+    all_internal_nets: set[str] = set()
+    for sn in supernodes:
+        all_internal_nets.update(sn.internal_nets)
+
+    # ---------- 1. 识别电源网络 (与原逻辑相同) ----------
+    power_v_refs: set[str] = set()
+    pos_supply_nets: set[str] = set()
+    neg_supply_nets: set[str] = set()
+    ground_nets: set[str] = set()
+
+    for net_name in circuit.nets:
+        if _net_is_ground(net_name):
+            ground_nets.add(net_name)
+        elif _net_is_pos_supply(net_name):
+            pos_supply_nets.add(net_name)
+        elif _net_is_neg_supply(net_name):
+            neg_supply_nets.add(net_name)
+
+    for comp in circuit.components:
+        if _is_power_vsource(comp):
+            power_v_refs.add(comp.ref)
+            for p in comp.pins:
+                n = p.net_name
+                if not _net_is_ground(n):
+                    nl = n.lower()
+                    if nl in _POS_SUPPLY_NAMES or any(kw in nl for kw in ("vcc", "vdd")):
+                        pos_supply_nets.add(n)
+                    elif nl in _NEG_SUPPLY_NAMES or any(kw in nl for kw in ("vee",)):
+                        neg_supply_nets.add(n)
+                    else:
+                        pos_supply_nets.add(n)
+
+    all_power_nets = ground_nets | pos_supply_nets | neg_supply_nets
+
+    # ---------- 2. 过滤出非超节点元件, 走原逻辑 ----------
+    free_comps = [c for c in circuit.components
+                  if c.ref not in power_v_refs and c.ref not in ref_to_supernode]
+
+    # 对非超节点元件做对称检测 (差分对/电流镜)
+    sym_pairs = _detect_symmetric_pairs(free_comps, circuit)
+    sym_pairs = _optimize_diff_pairs(sym_pairs, free_comps, circuit)
+
+    _used_in_pairs = {p.left for p in sym_pairs} | {p.right for p in sym_pairs}
+    sym_pairs.extend(_detect_complementary_pairs(
+        free_comps, circuit,
+        pos_supply_nets, neg_supply_nets, ground_nets,
+        _used_in_pairs))
+
+    diff_pair_refs: list[tuple[str, str]] = []
+    mirrored_refs: set[str] = set()
+    mirror_left_refs: set[str] = set()
+    mirror_refs: set[str] = set()
+    for p in sym_pairs:
+        if p.kind == "complementary_pair":
+            continue
+        if p.kind == "diff_pair":
+            diff_pair_refs.append((p.left, p.right))
+        else:
+            mirrored_refs.add(p.right)
+            mirror_left_refs.add(p.left)
+    for p in sym_pairs:
+        if p.kind == "current_mirror":
+            mirror_refs.update({p.left, p.right})
+
+    free_comps = _reorder_components(free_comps, sym_pairs)
+
+    # ---------- 3. 分配 bit ----------
+    net_bit: dict[str, int] = {}
+    bit_counter = 2
+    for net_name in circuit.nets:
+        if net_name not in all_power_nets and net_name not in all_internal_nets:
+            net_bit[net_name] = bit_counter
+            bit_counter += 1
+
+    # ---------- 4a. 构建超节点 cells ----------
+    sn_cells: dict[str, dict] = {}
+    pwr_idx = 0
+
+    for sn in supernodes:
+        connections: dict[str, list[int]] = {}
+        port_directions: dict[str, str] = {}
+        sn_pwr_cells: list[tuple[str, dict]] = []
+
+        for port_name, (net_name, direction) in sn.external_ports.items():
+            # 跳过自动生成的内部端口标记
+            if port_name.startswith("_AUTO_") and net_name in all_internal_nets:
+                continue
+
+            # 跳过自动暴露的电源连接 — 它们是块的隐式内部布线,
+            # skin 中没有对应端口, 暴露会导致 netlistsvg 报错
+            if port_name.startswith("_AUTO_") and net_name in all_power_nets:
+                continue
+
+            if net_name in all_power_nets:
+                pwr_bit = bit_counter
+                bit_counter += 1
+                pwr_idx += 1
+
+                if net_name in ground_nets:
+                    pwr_type, pwr_label = "gnd", "GND"
+                elif net_name in neg_supply_nets:
+                    pwr_type, pwr_label = "vee", net_name.upper()
+                else:
+                    pwr_type, pwr_label = "vcc", net_name.upper()
+
+                pwr_cell_name = f"{pwr_type}_{pwr_idx}"
+                pwr_port_dir = "output" if pwr_type == "vcc" else "input"
+
+                sn_pwr_cells.append((pwr_cell_name, {
+                    "type": pwr_type,
+                    "port_directions": {"A": pwr_port_dir},
+                    "connections": {"A": [pwr_bit]},
+                    "attributes": {"name": pwr_label},
+                }))
+                # 使用清理后的端口名
+                clean_name = port_name.removeprefix("_AUTO_")
+                connections[clean_name] = [pwr_bit]
+                # netlistsvg 只接受 "input"/"output"
+                port_directions[clean_name] = direction if direction in ("input", "output") else "input"
+            else:
+                bit = net_bit.get(net_name, 0)
+                clean_name = port_name.removeprefix("_AUTO_")
+                connections[clean_name] = [bit]
+                # netlistsvg 只接受 "input"/"output"
+                port_directions[clean_name] = direction if direction in ("input", "output") else "input"
+
+        sn_cell = {
+            "type": sn.skin_type,
+            "attributes": {
+                "ref": sn.ref,
+                "value": sn.display_name,
+                "components": ",".join(sn.component_refs),
+            },
+            "connections": connections,
+            "port_directions": port_directions,
+        }
+
+        # 输出电源 cells → 超节点 cell
+        for pname, pcell in sn_pwr_cells:
+            sn_cells[pname] = pcell
+        sn_cells[sn.ref] = sn_cell
+
+    # ---------- 4b. 构建非超节点元件 cells (与原逻辑相同) ----------
+    comp_entries: list[tuple[str, dict, list[tuple[str, dict]]]] = []
+    dir_table = _PORT_DIR
+
+    for comp in free_comps:
+        skin_key = _resolve_skin_key(comp, circuit)
+        if comp.ref in mirrored_refs:
+            skin_key = skin_key + "_M"
+        elif comp.ref in mirror_left_refs:
+            skin_key = skin_key + "_ML"
+        skin_type = _SKIN_TYPE.get(skin_key, skin_key.lower())
+        base_key = skin_key
+        for _sfx in ("_DFR", "_M", "_ML"):
+            base_key = base_key.removesuffix(_sfx)
+        pin_map = _PIN_MAP.get(skin_key, _PIN_MAP.get(
+            base_key, _PIN_MAP.get(comp.type, {})))
+        port_dirs = dir_table.get(skin_key, dir_table.get(
+            base_key, dir_table.get(comp.type, {})))
+
+        connections: dict[str, list[int]] = {}
+        port_directions: dict[str, str] = {}
+        my_pwr_cells: list[tuple[str, dict]] = []
+
+        for p in comp.pins:
+            if comp.type == "M" and p.number == 4:
+                continue
+            skin_pin = pin_map.get(p.number)
+            if skin_pin is None:
+                continue
+            net_name = p.net_name
+            if net_name in all_power_nets:
+                pwr_bit = bit_counter
+                bit_counter += 1
+                pwr_idx += 1
+                if net_name in ground_nets:
+                    pwr_type, pwr_label = "gnd", "GND"
+                elif net_name in neg_supply_nets:
+                    pwr_type, pwr_label = "vee", net_name.upper()
+                else:
+                    pwr_type, pwr_label = "vcc", net_name.upper()
+                pwr_cell_name = f"{pwr_type}_{pwr_idx}"
+                pwr_port_dir = "output" if pwr_type == "vcc" else "input"
+                my_pwr_cells.append((pwr_cell_name, {
+                    "type": pwr_type,
+                    "port_directions": {"A": pwr_port_dir},
+                    "connections": {"A": [pwr_bit]},
+                    "attributes": {"name": pwr_label},
+                }))
+                connections[skin_pin] = [pwr_bit]
+            else:
+                bit = net_bit.get(net_name, 0)
+                connections[skin_pin] = [bit]
+            port_directions[skin_pin] = port_dirs.get(skin_pin, "input")
+
+        # 二极管接法 / 电流镜修复
+        if comp.type in ("M", "Q", "J"):
+            drain_pin = "D" if comp.type in ("M", "J") else "C"
+            gate_pin = "G" if comp.type in ("M", "J") else "B"
+            source_pin = "S" if comp.type in ("M", "J") else "E"
+            if (drain_pin in connections and gate_pin in connections
+                    and connections[drain_pin] == connections[gate_pin]):
+                port_directions[gate_pin] = port_directions.get(
+                    drain_pin, "output")
+            elif comp.ref in mirror_refs:
+                if drain_pin in port_directions and gate_pin in port_directions:
+                    port_directions[gate_pin] = port_directions[drain_pin]
+            if "PNP" in skin_key or "PMOS" in skin_key:
+                d_net = next(
+                    (pp.net_name for pp in comp.pins
+                     if pin_map.get(pp.number) == drain_pin), "")
+                s_net = next(
+                    (pp.net_name for pp in comp.pins
+                     if pin_map.get(pp.number) == source_pin), "")
+                d_to_neg = (d_net in neg_supply_nets or d_net in ground_nets)
+                s_to_nonpower = (s_net != "" and s_net not in all_power_nets)
+                if d_to_neg and s_to_nonpower:
+                    port_directions[source_pin] = "output"
+
+        comp_cell = {
+            "type": skin_type,
+            "attributes": {"value": comp.value, "ref": comp.ref},
+            "connections": connections,
+            "port_directions": port_directions,
+        }
+        comp_entries.append((comp.ref, comp_cell, my_pwr_cells))
+
+    # ---- 组装非超节点 cells (与原逻辑相同) ----
+    paired_refs = {p.left for p in sym_pairs} | {p.right for p in sym_pairs}
+    pair_left_set = {p.left for p in sym_pairs}
+
+    cells: dict[str, Any] = {}
+    emitted: set[str] = set()
+
+    # 先放超节点 cells
+    cells.update(sn_cells)
+
+    for ref, cell, pwr_cells in comp_entries:
+        if ref in emitted:
+            continue
+        if ref in pair_left_set:
+            right_ref = next(p.right for p in sym_pairs if p.left == ref)
+            right_entry = next(e for e in comp_entries if e[0] == right_ref)
+            for pname, pcell in pwr_cells:
+                if pcell["type"] == "vcc":
+                    cells[pname] = pcell
+            for pname, pcell in right_entry[2]:
+                if pcell["type"] == "vcc":
+                    cells[pname] = pcell
+            cells[ref] = cell
+            cells[right_ref] = right_entry[1]
+            for pname, pcell in pwr_cells:
+                if pcell["type"] != "vcc":
+                    cells[pname] = pcell
+            for pname, pcell in right_entry[2]:
+                if pcell["type"] != "vcc":
+                    cells[pname] = pcell
+            emitted.update({ref, right_ref})
+        elif ref in paired_refs:
+            continue
+        else:
+            for pname, pcell in pwr_cells:
+                cells[pname] = pcell
+            cells[ref] = cell
+            emitted.add(ref)
+
+    # ---------- 5. 构建 ports ----------
+    ports: dict[str, Any] = {}
+    cell_names = set(cells.keys())
+    for net in circuit.port_nets():
+        if net.name in all_power_nets:
+            continue
+        if net.name in cell_names:
+            continue
+        if net.name in all_internal_nets:
+            continue
+        bit = net_bit.get(net.name, 0)
+        direction = net.direction if net.direction != "inout" else "input"
+        ports[net.name] = {"bits": [bit], "direction": direction}
+
+    return {"modules": {"": {"cells": cells, "ports": ports}}}, diff_pair_refs
+
+
 def circuit_to_json_string(circuit: Circuit, indent: int = 2,
-                           *, direction: str = "DOWN") -> str:
-    data, _ = circuit_to_netlistsvg_json(circuit, direction=direction)
+                           *, direction: str = "DOWN",
+                           supernodes: list | None = None) -> str:
+    if supernodes:
+        data, _ = circuit_to_netlistsvg_json_with_supernodes(
+            circuit, supernodes, direction=direction)
+    else:
+        data, _ = circuit_to_netlistsvg_json(circuit, direction=direction)
     return json.dumps(data, indent=indent, ensure_ascii=False)

@@ -2,14 +2,226 @@
   "modules": {
     "": {
       "cells": {
-        "gnd_1": {
-          "type": "gnd",
+        "VBE_1": {
+          "type": "vbe_multiplier",
+          "attributes": {
+            "ref": "VBE_1",
+            "value": "Vbe 乘法器",
+            "components": "QBIAS,RB1,RB2"
+          },
+          "connections": {
+            "TOP": [
+              13
+            ],
+            "BOT": [
+              15
+            ]
+          },
+          "port_directions": {
+            "TOP": "input",
+            "BOT": "output"
+          }
+        },
+        "DP_1": {
+          "type": "diff_pair_npn",
+          "attributes": {
+            "ref": "DP_1",
+            "value": "NPN 差分对",
+            "components": "Q1,Q2"
+          },
+          "connections": {
+            "INP": [
+              2
+            ],
+            "INN": [
+              3
+            ],
+            "OUTP": [
+              7
+            ],
+            "OUTN": [
+              8
+            ],
+            "TAIL": [
+              6
+            ]
+          },
+          "port_directions": {
+            "INP": "input",
+            "INN": "input",
+            "OUTP": "output",
+            "OUTN": "output",
+            "TAIL": "output"
+          }
+        },
+        "DP_2": {
+          "type": "diff_pair_pnp",
+          "attributes": {
+            "ref": "DP_2",
+            "value": "PNP 差分对",
+            "components": "Q3,Q4"
+          },
+          "connections": {
+            "INP": [
+              4
+            ],
+            "INN": [
+              5
+            ],
+            "OUTP": [
+              10
+            ],
+            "OUTN": [
+              11
+            ],
+            "TAIL": [
+              9
+            ]
+          },
+          "port_directions": {
+            "INP": "input",
+            "INN": "input",
+            "OUTP": "output",
+            "OUTN": "output",
+            "TAIL": "input"
+          }
+        },
+        "vcc_1": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              24
+            ]
+          },
+          "attributes": {
+            "name": "VCC"
+          }
+        },
+        "vee_2": {
+          "type": "vee",
           "port_directions": {
             "A": "input"
           },
           "connections": {
             "A": [
               25
+            ]
+          },
+          "attributes": {
+            "name": "VEE"
+          }
+        },
+        "PP_1": {
+          "type": "push_pull_bjt",
+          "attributes": {
+            "ref": "PP_1",
+            "value": "BJT 推挽输出",
+            "components": "QDRVL,QDRVU"
+          },
+          "connections": {
+            "IN_HI": [
+              13
+            ],
+            "IN_LO": [
+              15
+            ],
+            "OUT_HI": [
+              16
+            ],
+            "OUT_LO": [
+              17
+            ],
+            "SUPPLY_HI": [
+              24
+            ],
+            "SUPPLY_LO": [
+              25
+            ]
+          },
+          "port_directions": {
+            "IN_HI": "input",
+            "IN_LO": "input",
+            "OUT_HI": "output",
+            "OUT_LO": "output",
+            "SUPPLY_HI": "input",
+            "SUPPLY_LO": "output"
+          }
+        },
+        "vcc_3": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
+          },
+          "connections": {
+            "A": [
+              26
+            ]
+          },
+          "attributes": {
+            "name": "VCC"
+          }
+        },
+        "vee_4": {
+          "type": "vee",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              27
+            ]
+          },
+          "attributes": {
+            "name": "VEE"
+          }
+        },
+        "PP_2": {
+          "type": "push_pull_bjt",
+          "attributes": {
+            "ref": "PP_2",
+            "value": "BJT 推挽输出",
+            "components": "QOUTL,QOUTU"
+          },
+          "connections": {
+            "IN_HI": [
+              18
+            ],
+            "IN_LO": [
+              19
+            ],
+            "OUT_HI": [
+              20
+            ],
+            "OUT_LO": [
+              21
+            ],
+            "SUPPLY_HI": [
+              26
+            ],
+            "SUPPLY_LO": [
+              27
+            ]
+          },
+          "port_directions": {
+            "IN_HI": "input",
+            "IN_LO": "input",
+            "OUT_HI": "output",
+            "OUT_LO": "output",
+            "SUPPLY_HI": "input",
+            "SUPPLY_LO": "output"
+          }
+        },
+        "gnd_5": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              28
             ]
           },
           "attributes": {
@@ -27,7 +239,7 @@
               2
             ],
             "-": [
-              25
+              28
             ]
           },
           "port_directions": {
@@ -35,14 +247,14 @@
             "-": "output"
           }
         },
-        "gnd_2": {
+        "gnd_6": {
           "type": "gnd",
           "port_directions": {
             "A": "input"
           },
           "connections": {
             "A": [
-              26
+              29
             ]
           },
           "attributes": {
@@ -60,7 +272,7 @@
               3
             ],
             "-": [
-              26
+              29
             ]
           },
           "port_directions": {
@@ -68,14 +280,14 @@
             "-": "output"
           }
         },
-        "gnd_3": {
+        "gnd_7": {
           "type": "gnd",
           "port_directions": {
             "A": "input"
           },
           "connections": {
             "A": [
-              27
+              30
             ]
           },
           "attributes": {
@@ -93,7 +305,7 @@
               4
             ],
             "-": [
-              27
+              30
             ]
           },
           "port_directions": {
@@ -101,14 +313,14 @@
             "-": "output"
           }
         },
-        "gnd_4": {
+        "gnd_8": {
           "type": "gnd",
           "port_directions": {
             "A": "input"
           },
           "connections": {
             "A": [
-              28
+              31
             ]
           },
           "attributes": {
@@ -126,7 +338,7 @@
               5
             ],
             "-": [
-              28
+              31
             ]
           },
           "port_directions": {
@@ -134,14 +346,14 @@
             "-": "output"
           }
         },
-        "vee_5": {
+        "vee_9": {
           "type": "vee",
           "port_directions": {
             "A": "input"
           },
           "connections": {
             "A": [
-              29
+              32
             ]
           },
           "attributes": {
@@ -159,7 +371,7 @@
               6
             ],
             "-": [
-              29
+              32
             ]
           },
           "port_directions": {
@@ -167,60 +379,14 @@
             "-": "output"
           }
         },
-        "Q2": {
-          "type": "q_npn",
-          "attributes": {
-            "value": "NPN_IN",
-            "ref": "Q2"
-          },
-          "connections": {
-            "C": [
-              8
-            ],
-            "B": [
-              3
-            ],
-            "E": [
-              6
-            ]
-          },
-          "port_directions": {
-            "C": "input",
-            "B": "input",
-            "E": "output"
-          }
-        },
-        "Q1": {
-          "type": "q_npn",
-          "attributes": {
-            "value": "NPN_IN",
-            "ref": "Q1"
-          },
-          "connections": {
-            "C": [
-              7
-            ],
-            "B": [
-              2
-            ],
-            "E": [
-              6
-            ]
-          },
-          "port_directions": {
-            "C": "input",
-            "B": "input",
-            "E": "output"
-          }
-        },
-        "vcc_6": {
+        "vcc_10": {
           "type": "vcc",
           "port_directions": {
             "A": "output"
           },
           "connections": {
             "A": [
-              30
+              33
             ]
           },
           "attributes": {
@@ -235,7 +401,7 @@
           },
           "connections": {
             "A": [
-              30
+              33
             ],
             "B": [
               7
@@ -246,14 +412,14 @@
             "B": "output"
           }
         },
-        "vcc_7": {
+        "vcc_11": {
           "type": "vcc",
           "port_directions": {
             "A": "output"
           },
           "connections": {
             "A": [
-              31
+              34
             ]
           },
           "attributes": {
@@ -268,7 +434,7 @@
           },
           "connections": {
             "A": [
-              31
+              34
             ],
             "B": [
               8
@@ -279,14 +445,14 @@
             "B": "output"
           }
         },
-        "vcc_8": {
+        "vcc_12": {
           "type": "vcc",
           "port_directions": {
             "A": "output"
           },
           "connections": {
             "A": [
-              32
+              35
             ]
           },
           "attributes": {
@@ -301,7 +467,7 @@
           },
           "connections": {
             "+": [
-              32
+              35
             ],
             "-": [
               9
@@ -312,60 +478,14 @@
             "-": "output"
           }
         },
-        "Q4": {
-          "type": "q_pnp",
-          "attributes": {
-            "value": "PNP_IN",
-            "ref": "Q4"
-          },
-          "connections": {
-            "C": [
-              11
-            ],
-            "B": [
-              5
-            ],
-            "E": [
-              9
-            ]
-          },
-          "port_directions": {
-            "C": "output",
-            "B": "input",
-            "E": "input"
-          }
-        },
-        "Q3": {
-          "type": "q_pnp",
-          "attributes": {
-            "value": "PNP_IN",
-            "ref": "Q3"
-          },
-          "connections": {
-            "C": [
-              10
-            ],
-            "B": [
-              4
-            ],
-            "E": [
-              9
-            ]
-          },
-          "port_directions": {
-            "C": "output",
-            "B": "input",
-            "E": "input"
-          }
-        },
-        "vee_9": {
+        "vee_13": {
           "type": "vee",
           "port_directions": {
             "A": "input"
           },
           "connections": {
             "A": [
-              33
+              36
             ]
           },
           "attributes": {
@@ -383,7 +503,7 @@
               10
             ],
             "B": [
-              33
+              36
             ]
           },
           "port_directions": {
@@ -391,14 +511,14 @@
             "B": "output"
           }
         },
-        "vee_10": {
+        "vee_14": {
           "type": "vee",
           "port_directions": {
             "A": "input"
           },
           "connections": {
             "A": [
-              34
+              37
             ]
           },
           "attributes": {
@@ -416,7 +536,7 @@
               11
             ],
             "B": [
-              34
+              37
             ]
           },
           "port_directions": {
@@ -424,14 +544,14 @@
             "B": "output"
           }
         },
-        "vcc_11": {
+        "vcc_15": {
           "type": "vcc",
           "port_directions": {
             "A": "output"
           },
           "connections": {
             "A": [
-              35
+              38
             ]
           },
           "attributes": {
@@ -446,7 +566,7 @@
           },
           "connections": {
             "A": [
-              35
+              38
             ],
             "B": [
               12
@@ -480,14 +600,14 @@
             "E": "input"
           }
         },
-        "vee_12": {
+        "vee_16": {
           "type": "vee",
           "port_directions": {
             "A": "input"
           },
           "connections": {
             "A": [
-              36
+              39
             ]
           },
           "attributes": {
@@ -505,7 +625,7 @@
               13
             ],
             "-": [
-              36
+              39
             ]
           },
           "port_directions": {
@@ -532,14 +652,14 @@
             "B": "output"
           }
         },
-        "vee_13": {
+        "vee_17": {
           "type": "vee",
           "port_directions": {
             "A": "input"
           },
           "connections": {
             "A": [
-              37
+              40
             ]
           },
           "attributes": {
@@ -557,7 +677,7 @@
               14
             ],
             "B": [
-              37
+              40
             ]
           },
           "port_directions": {
@@ -588,14 +708,14 @@
             "E": "output"
           }
         },
-        "vcc_14": {
+        "vcc_18": {
           "type": "vcc",
           "port_directions": {
             "A": "output"
           },
           "connections": {
             "A": [
-              38
+              41
             ]
           },
           "attributes": {
@@ -610,7 +730,7 @@
           },
           "connections": {
             "+": [
-              38
+              41
             ],
             "-": [
               15
@@ -640,67 +760,6 @@
             "B": "output"
           }
         },
-        "QBIAS": {
-          "type": "q_npn",
-          "attributes": {
-            "value": "NPN_BIAS",
-            "ref": "QBIAS"
-          },
-          "connections": {
-            "C": [
-              13
-            ],
-            "B": [
-              16
-            ],
-            "E": [
-              15
-            ]
-          },
-          "port_directions": {
-            "C": "input",
-            "B": "input",
-            "E": "output"
-          }
-        },
-        "RB1": {
-          "type": "r_v",
-          "attributes": {
-            "value": "2.7k",
-            "ref": "RB1"
-          },
-          "connections": {
-            "A": [
-              13
-            ],
-            "B": [
-              16
-            ]
-          },
-          "port_directions": {
-            "A": "input",
-            "B": "output"
-          }
-        },
-        "RB2": {
-          "type": "r_v",
-          "attributes": {
-            "value": "1.0k",
-            "ref": "RB2"
-          },
-          "connections": {
-            "A": [
-              16
-            ],
-            "B": [
-              15
-            ]
-          },
-          "port_directions": {
-            "A": "input",
-            "B": "output"
-          }
-        },
         "CBIAS": {
           "type": "c_v",
           "attributes": {
@@ -720,80 +779,6 @@
             "B": "output"
           }
         },
-        "vcc_15": {
-          "type": "vcc",
-          "port_directions": {
-            "A": "output"
-          },
-          "connections": {
-            "A": [
-              39
-            ]
-          },
-          "attributes": {
-            "name": "VCC"
-          }
-        },
-        "QDRVU": {
-          "type": "q_npn",
-          "attributes": {
-            "value": "NPN_DRV",
-            "ref": "QDRVU"
-          },
-          "connections": {
-            "C": [
-              39
-            ],
-            "B": [
-              13
-            ],
-            "E": [
-              17
-            ]
-          },
-          "port_directions": {
-            "C": "input",
-            "B": "input",
-            "E": "output"
-          }
-        },
-        "QDRVL": {
-          "type": "q_pnp",
-          "attributes": {
-            "value": "PNP_DRV",
-            "ref": "QDRVL"
-          },
-          "connections": {
-            "C": [
-              40
-            ],
-            "B": [
-              15
-            ],
-            "E": [
-              18
-            ]
-          },
-          "port_directions": {
-            "C": "output",
-            "B": "input",
-            "E": "output"
-          }
-        },
-        "vee_16": {
-          "type": "vee",
-          "port_directions": {
-            "A": "input"
-          },
-          "connections": {
-            "A": [
-              40
-            ]
-          },
-          "attributes": {
-            "name": "VEE"
-          }
-        },
         "RBDU": {
           "type": "r_v",
           "attributes": {
@@ -802,10 +787,10 @@
           },
           "connections": {
             "A": [
-              17
+              16
             ],
             "B": [
-              19
+              18
             ]
           },
           "port_directions": {
@@ -821,89 +806,15 @@
           },
           "connections": {
             "A": [
-              18
+              17
             ],
             "B": [
-              20
+              19
             ]
           },
           "port_directions": {
             "A": "input",
             "B": "output"
-          }
-        },
-        "vcc_17": {
-          "type": "vcc",
-          "port_directions": {
-            "A": "output"
-          },
-          "connections": {
-            "A": [
-              41
-            ]
-          },
-          "attributes": {
-            "name": "VCC"
-          }
-        },
-        "QOUTU": {
-          "type": "q_npn",
-          "attributes": {
-            "value": "NPN_OUT",
-            "ref": "QOUTU"
-          },
-          "connections": {
-            "C": [
-              41
-            ],
-            "B": [
-              19
-            ],
-            "E": [
-              21
-            ]
-          },
-          "port_directions": {
-            "C": "input",
-            "B": "input",
-            "E": "output"
-          }
-        },
-        "QOUTL": {
-          "type": "q_pnp",
-          "attributes": {
-            "value": "PNP_OUT",
-            "ref": "QOUTL"
-          },
-          "connections": {
-            "C": [
-              42
-            ],
-            "B": [
-              20
-            ],
-            "E": [
-              22
-            ]
-          },
-          "port_directions": {
-            "C": "output",
-            "B": "input",
-            "E": "output"
-          }
-        },
-        "vee_18": {
-          "type": "vee",
-          "port_directions": {
-            "A": "input"
-          },
-          "connections": {
-            "A": [
-              42
-            ]
-          },
-          "attributes": {
-            "name": "VEE"
           }
         },
         "REU": {
@@ -914,10 +825,10 @@
           },
           "connections": {
             "A": [
-              21
+              20
             ],
             "B": [
-              23
+              22
             ]
           },
           "port_directions": {
@@ -933,10 +844,10 @@
           },
           "connections": {
             "A": [
-              22
+              21
             ],
             "B": [
-              23
+              22
             ]
           },
           "port_directions": {
@@ -951,7 +862,7 @@
           },
           "connections": {
             "A": [
-              43
+              42
             ]
           },
           "attributes": {
@@ -966,10 +877,10 @@
           },
           "connections": {
             "A": [
-              23
+              22
             ],
             "B": [
-              43
+              42
             ]
           },
           "port_directions": {
@@ -984,7 +895,7 @@
           },
           "connections": {
             "A": [
-              44
+              43
             ]
           },
           "attributes": {
@@ -999,10 +910,10 @@
           },
           "connections": {
             "A": [
-              24
+              23
             ],
             "B": [
-              44
+              43
             ]
           },
           "port_directions": {
@@ -1018,10 +929,10 @@
           },
           "connections": {
             "A": [
-              23
+              22
             ],
             "B": [
-              24
+              23
             ]
           },
           "port_directions": {
@@ -1036,7 +947,7 @@
           },
           "connections": {
             "A": [
-              45
+              44
             ]
           },
           "attributes": {
@@ -1054,7 +965,7 @@
               13
             ],
             "B": [
-              45
+              44
             ]
           },
           "port_directions": {
@@ -1069,7 +980,7 @@
           },
           "connections": {
             "A": [
-              46
+              45
             ]
           },
           "attributes": {
@@ -1087,7 +998,7 @@
               15
             ],
             "B": [
-              46
+              45
             ]
           },
           "port_directions": {
@@ -1102,7 +1013,7 @@
           },
           "connections": {
             "A": [
-              47
+              46
             ]
           },
           "attributes": {
@@ -1117,10 +1028,10 @@
           },
           "connections": {
             "A": [
-              23
+              22
             ],
             "B": [
-              47
+              46
             ]
           },
           "port_directions": {
@@ -1156,31 +1067,31 @@
         },
         "BOUTU": {
           "bits": [
-            19
+            18
           ],
           "direction": "output"
         },
         "BOUTL": {
           "bits": [
-            20
+            19
           ],
           "direction": "output"
         },
         "EOUTU": {
           "bits": [
-            21
+            20
           ],
           "direction": "output"
         },
         "EOUTL": {
           "bits": [
-            22
+            21
           ],
           "direction": "output"
         },
         "OUT": {
           "bits": [
-            23
+            22
           ],
           "direction": "output"
         }

@@ -24,6 +24,8 @@ def main(argv: list[str] | None = None) -> int:
     p_conv.add_argument("--direct", action="store_true", help="快捷路径")
     p_conv.add_argument("--skin", default=None)
     p_conv.add_argument("--no-svg", action="store_true")
+    p_conv.add_argument("--supernodes", action="store_true",
+                        help="启用超节点识别 (差分对、电流镜等折叠为单个块)")
 
     # parse
     p_parse = sub.add_parser("parse", help="仅解析")
@@ -48,6 +50,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.input, args.output,
                 dialect=args.dialect, direct=args.direct,
                 skin=args.skin, skip_svg=args.no_svg,
+                use_supernodes=args.supernodes,
             )
             print(result.circuit.summary())
             if result.warnings:

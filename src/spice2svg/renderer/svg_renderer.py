@@ -14,7 +14,7 @@ import subprocess
 from pathlib import Path
 
 from ..models import Circuit
-from .json_converter import circuit_to_netlistsvg_json
+from .json_converter import circuit_to_netlistsvg_json, circuit_to_netlistsvg_json_with_supernodes
 from .skin import get_skin_path, get_default_skin_path
 
 
@@ -425,12 +425,16 @@ def _mirror_diff_pairs_in_svg(
 
 
 def render_svg_direct(circuit: Circuit, output_path: Path,
-                      skin: str | None = None) -> Path:
+                      skin: str | None = None,
+                      supernodes: list | None = None) -> Path:
     """IR → JSON → netlistsvg → SVG → 差分对后处理（快捷路径）。
 
     差分对成员使用相同的 normal skin (base/gate-left) 渲染,
     渲染后通过 SVG 后处理将右侧成员镜像为 base/gate-right,
     实现基极/栅极向外。
+
+    当 supernodes 不为空时, 使用超节点合并版 JSON 转换,
+    识别出的超节点作为单个 cell 输出。
     """
     netlistsvg = _find_netlistsvg()
     if not netlistsvg:
@@ -458,10 +462,15 @@ def render_svg_direct(circuit: Circuit, output_path: Path,
     output_path.parent.mkdir(parents=True, exist_ok=True)
     json_path = output_path.with_suffix(".json")
 
-    # ---- 生成 JSON (所有差分对成员使用 normal skin) ----
-    json_data, diff_pair_refs = circuit_to_netlistsvg_json(
-        circuit, direction=direction,
-    )
+    # ---- 生成 JSON ----
+    if supernodes:
+        json_data, diff_pair_refs = circuit_to_netlistsvg_json_with_supernodes(
+            circuit, supernodes, direction=direction,
+        )
+    else:
+        json_data, diff_pair_refs = circuit_to_netlistsvg_json(
+            circuit, direction=direction,
+        )
 
     json_path.write_text(
         json.dumps(json_data, indent=2, ensure_ascii=False),

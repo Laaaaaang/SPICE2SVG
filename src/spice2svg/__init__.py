@@ -11,3 +11,4 @@ from .models import Circuit, Component, Net, Pin
 from .parser import parse, parse_file
 from .generator import generate_skidl_code
 from .renderer import circuit_to_netlistsvg_json, circuit_to_json_string
+from .recognizer import recognize_supernodes, ALL_PATTERNS, SuperNode

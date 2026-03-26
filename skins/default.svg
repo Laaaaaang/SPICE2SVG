@@ -454,4 +454,841 @@ text {
   <g s:x="8" s:y="40" s:pid="D" s:position="bottom"/>
 </g>
 
+<!-- ============================================================ -->
+<!-- SUPERNODE SKINS — Detailed schematic block representations  -->
+<!-- Each block contains actual transistor/resistor graphics     -->
+<!-- ============================================================ -->
+
+<!-- ==================== NPN Diff Pair ==================== -->
+<!--  OUTP    OUTN          Two NPN BJTs sharing emitter
+       |       |            Bases facing outward (left/right)
+      [QL]   [QR]           Collectors up, shared emitter → TAIL
+        \   /
+         TAIL
+  Layout: 80 wide × 70 tall  -->
+<g s:type="diff_pair_npn" s:width="80" s:height="70" transform="translate(5,780)">
+  <s:alias val="diff_pair_npn"/>
+  <text x="40" y="-4" class="nodelabel $cell_id" s:attribute="ref">DP</text>
+  <text x="40" y="68" class="nodelabel $cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <!-- bounding -->
+  <rect x="0" y="0" width="80" height="70" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- QL: NPN left (base-left) at (8,14) -->
+  <circle r="14" cx="22" cy="28" class="symbol $cell_id"/>
+  <path d="M8,28 H16 M16,18 V38" class="detail $cell_id"/>
+  <path d="m16,22 10,-8" class="detail $cell_id"/>
+  <path d="m16,33 10,8" class="detail $cell_id"/>
+  <path d="m26,41 -5,-1 2,-4 z" style="fill:#000" class="$cell_id"/>
+  <!-- QL wires: C→OUTP top, E→TAIL bottom -->
+  <path d="M26,14 V0" class="$cell_id"/>
+  <path d="M26,41 V54" class="$cell_id"/>
+  <!-- QR: NPN right (base-right, mirrored) at (48,14) -->
+  <circle r="14" cx="58" cy="28" class="symbol $cell_id"/>
+  <path d="M72,28 H64 M64,18 V38" class="detail $cell_id"/>
+  <path d="m64,22 -10,-8" class="detail $cell_id"/>
+  <path d="m64,33 -10,8" class="detail $cell_id"/>
+  <path d="m54,41 5,-1 -2,-4 z" style="fill:#000" class="$cell_id"/>
+  <!-- QR wires: C→OUTN top, E→TAIL bottom -->
+  <path d="M54,14 V0" class="$cell_id"/>
+  <path d="M54,41 V54" class="$cell_id"/>
+  <!-- shared emitter wire -->
+  <path d="M26,54 H54 M40,54 V70" class="$cell_id"/>
+  <!-- INP / INN boundary wires -->
+  <path d="M0,28 H8" class="$cell_id"/>
+  <path d="M80,28 H72" class="$cell_id"/>
+  <!-- ports -->
+  <g s:x="26" s:y="0" s:pid="OUTP" s:position="top"/>
+  <g s:x="54" s:y="0" s:pid="OUTN" s:position="top"/>
+  <g s:x="0" s:y="28" s:pid="INP" s:position="left"/>
+  <g s:x="80" s:y="28" s:pid="INN" s:position="right"/>
+  <g s:x="40" s:y="70" s:pid="TAIL" s:position="bottom"/>
+</g>
+
+<!-- ==================== PNP Diff Pair ==================== -->
+<!--  TAIL (top, shared E → power)
+       /   \
+     [QL]  [QR]   PNP: E up, C down
+       |     |
+     OUTP  OUTN   -->
+<g s:type="diff_pair_pnp" s:width="80" s:height="70" transform="translate(100,780)">
+  <s:alias val="diff_pair_pnp"/>
+  <text x="40" y="-4" class="nodelabel $cell_id" s:attribute="ref">DP</text>
+  <text x="40" y="68" class="nodelabel $cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="80" height="70" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- QL: PNP left -->
+  <circle r="14" cx="22" cy="42" class="symbol $cell_id"/>
+  <path d="M8,42 H16 M16,32 V52" class="detail $cell_id"/>
+  <path d="m16,36 10,-8" class="detail $cell_id"/>
+  <path d="m16,47 10,8" class="detail $cell_id"/>
+  <path d="m18,35 5,-1 -2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M26,28 V16 M26,55 V70" class="$cell_id"/>
+  <!-- QR: PNP right (mirrored) -->
+  <circle r="14" cx="58" cy="42" class="symbol $cell_id"/>
+  <path d="M72,42 H64 M64,32 V52" class="detail $cell_id"/>
+  <path d="m64,36 -10,-8" class="detail $cell_id"/>
+  <path d="m64,47 -10,8" class="detail $cell_id"/>
+  <path d="m62,35 -5,-1 2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M54,28 V16 M54,55 V70" class="$cell_id"/>
+  <!-- shared emitter wire top -->
+  <path d="M26,16 H54 M40,16 V0" class="$cell_id"/>
+  <!-- INP / INN boundary wires -->
+  <path d="M0,42 H8" class="$cell_id"/>
+  <path d="M80,42 H72" class="$cell_id"/>
+  <g s:x="26" s:y="70" s:pid="OUTP" s:position="bottom"/>
+  <g s:x="54" s:y="70" s:pid="OUTN" s:position="bottom"/>
+  <g s:x="0" s:y="42" s:pid="INP" s:position="left"/>
+  <g s:x="80" s:y="42" s:pid="INN" s:position="right"/>
+  <g s:x="40" s:y="0" s:pid="TAIL" s:position="top"/>
+</g>
+
+<!-- ==================== NMOS Diff Pair ==================== -->
+<g s:type="diff_pair_nmos" s:width="80" s:height="80" transform="translate(5,870)">
+  <s:alias val="diff_pair_nmos"/>
+  <text x="40" y="-4" class="nodelabel $cell_id" s:attribute="ref">DP</text>
+  <text x="40" y="78" class="nodelabel $cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="80" height="80" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- ML: NMOS left (gate-left) -->
+  <path d="M8,36 H14" class="detail $cell_id"/>
+  <path d="M16,20 V52" class="detail $cell_id"/>
+  <path d="M20,20 V28 M20,32 V36 M20,40 V52" class="detail $cell_id"/>
+  <path d="M20,24 H30 V6" class="$cell_id"/>
+  <path d="M20,46 H30 V62" class="$cell_id"/>
+  <path d="M20,36 H30" class="detail $cell_id"/>
+  <path d="m24,33 6,3 -6,3 z" style="fill:#000" class="$cell_id"/>
+  <!-- MR: NMOS right (gate-right, mirrored) -->
+  <path d="M72,36 H66" class="detail $cell_id"/>
+  <path d="M64,20 V52" class="detail $cell_id"/>
+  <path d="M60,20 V28 M60,32 V36 M60,40 V52" class="detail $cell_id"/>
+  <path d="M60,24 H50 V6" class="$cell_id"/>
+  <path d="M60,46 H50 V62" class="$cell_id"/>
+  <path d="M60,36 H50" class="detail $cell_id"/>
+  <path d="m56,33 -6,3 6,3 z" style="fill:#000" class="$cell_id"/>
+  <!-- shared source wire bottom -->
+  <path d="M30,62 H50 M40,62 V80" class="$cell_id"/>
+  <!-- drain wires top -->
+  <path d="M30,6 V0 M50,6 V0" class="$cell_id"/>
+  <!-- INP / INN boundary wires -->
+  <path d="M0,36 H8" class="$cell_id"/>
+  <path d="M80,36 H72" class="$cell_id"/>
+  <g s:x="30" s:y="0" s:pid="OUTP" s:position="top"/>
+  <g s:x="50" s:y="0" s:pid="OUTN" s:position="top"/>
+  <g s:x="0" s:y="36" s:pid="INP" s:position="left"/>
+  <g s:x="80" s:y="36" s:pid="INN" s:position="right"/>
+  <g s:x="40" s:y="80" s:pid="TAIL" s:position="bottom"/>
+</g>
+
+<!-- ==================== PMOS Diff Pair ==================== -->
+<g s:type="diff_pair_pmos" s:width="80" s:height="80" transform="translate(100,870)">
+  <s:alias val="diff_pair_pmos"/>
+  <text x="40" y="-4" class="nodelabel $cell_id" s:attribute="ref">DP</text>
+  <text x="40" y="78" class="nodelabel $cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="80" height="80" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- ML: PMOS left (gate-left) -->
+  <path d="M8,44 H12" class="detail $cell_id"/>
+  <circle cx="14" cy="44" r="2" class="symbol $cell_id"/>
+  <path d="M16,28 V60" class="detail $cell_id"/>
+  <path d="M20,28 V60" class="detail $cell_id"/>
+  <path d="M20,32 H30 V18" class="$cell_id"/>
+  <path d="M20,56 H30 V74" class="$cell_id"/>
+  <path d="M30,44 H20" class="detail $cell_id"/>
+  <path d="m26,41 -6,3 6,3 z" style="fill:#000" class="$cell_id"/>
+  <!-- MR: PMOS right (gate-right, mirrored) -->
+  <path d="M72,44 H68" class="detail $cell_id"/>
+  <circle cx="66" cy="44" r="2" class="symbol $cell_id"/>
+  <path d="M64,28 V60" class="detail $cell_id"/>
+  <path d="M60,28 V60" class="detail $cell_id"/>
+  <path d="M60,32 H50 V18" class="$cell_id"/>
+  <path d="M60,56 H50 V74" class="$cell_id"/>
+  <path d="M50,44 H60" class="detail $cell_id"/>
+  <path d="m54,41 6,3 -6,3 z" style="fill:#000" class="$cell_id"/>
+  <!-- shared source wire top -->
+  <path d="M30,18 H50 M40,18 V0" class="$cell_id"/>
+  <!-- drain wires bottom -->
+  <path d="M30,74 V80 M50,74 V80" class="$cell_id"/>
+  <!-- INP / INN boundary wires -->
+  <path d="M0,44 H8" class="$cell_id"/>
+  <path d="M80,44 H72" class="$cell_id"/>
+  <g s:x="30" s:y="80" s:pid="OUTP" s:position="bottom"/>
+  <g s:x="50" s:y="80" s:pid="OUTN" s:position="bottom"/>
+  <g s:x="0" s:y="44" s:pid="INP" s:position="left"/>
+  <g s:x="80" s:y="44" s:pid="INN" s:position="right"/>
+  <g s:x="40" s:y="0" s:pid="TAIL" s:position="top"/>
+</g>
+
+<!-- ==================== NPN Current Mirror ==================== -->
+<!--   IN      OUT       QREF(diode): B=C
+        |       |         Both share B and E
+      [QREF] [QMIR]      QREF.C=QREF.B
+        \     /
+         RAIL             -->
+<g s:type="current_mirror_npn" s:width="70" s:height="60" transform="translate(5,970)">
+  <s:alias val="current_mirror_npn"/>
+  <text x="35" y="-4" class="nodelabel $cell_id" s:attribute="ref">CM</text>
+  <text x="35" y="58" class="nodelabel $cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="70" height="60" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- QREF: NPN left (base-left) -->
+  <circle r="12" cx="20" cy="24" class="symbol $cell_id"/>
+  <path d="M8,24 H14 M14,16 V32" class="detail $cell_id"/>
+  <path d="m14,19 9,-7" class="detail $cell_id"/>
+  <path d="m14,29 9,7" class="detail $cell_id"/>
+  <path d="m23,36 -5,-1 2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M23,12 V0 M23,36 V48" class="$cell_id"/>
+  <!-- diode connection: C→B short -->
+  <path d="M23,12 H8 V24" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <!-- QMIR: NPN right (base-right mirrored) -->
+  <circle r="12" cx="50" cy="24" class="symbol $cell_id"/>
+  <path d="M62,24 H56 M56,16 V32" class="detail $cell_id"/>
+  <path d="m56,19 -9,-7" class="detail $cell_id"/>
+  <path d="m56,29 -9,7" class="detail $cell_id"/>
+  <path d="m47,36 5,-1 -2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M47,12 V0 M47,36 V48" class="$cell_id"/>
+  <!-- shared base wire (QREF.B → QMIR.B via diode link) -->
+  <path d="M8,24 H62" class="$cell_id"/>
+  <!-- shared emitter wire -->
+  <path d="M23,48 H47 M35,48 V60" class="$cell_id"/>
+  <g s:x="23" s:y="0" s:pid="IN" s:position="top"/>
+  <g s:x="47" s:y="0" s:pid="OUT" s:position="top"/>
+  <g s:x="35" s:y="60" s:pid="RAIL" s:position="bottom"/>
+</g>
+
+<!-- ==================== PNP Current Mirror ==================== -->
+<g s:type="current_mirror_pnp" s:width="70" s:height="60" transform="translate(90,970)">
+  <s:alias val="current_mirror_pnp"/>
+  <text x="35" y="-4" class="nodelabel $cell_id" s:attribute="ref">CM</text>
+  <text x="35" y="58" class="nodelabel $cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="70" height="60" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- QREF: PNP left -->
+  <circle r="12" cx="20" cy="36" class="symbol $cell_id"/>
+  <path d="M8,36 H14 M14,28 V44" class="detail $cell_id"/>
+  <path d="m14,31 9,-7" class="detail $cell_id"/>
+  <path d="m14,41 9,7" class="detail $cell_id"/>
+  <path d="m16,30 5,-1 -2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M23,24 V12 M23,48 V60" class="$cell_id"/>
+  <!-- diode: C→B -->
+  <path d="M23,48 H8 V36" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <!-- QMIR: PNP right (mirrored) -->
+  <circle r="12" cx="50" cy="36" class="symbol $cell_id"/>
+  <path d="M62,36 H56 M56,28 V44" class="detail $cell_id"/>
+  <path d="m56,31 -9,-7" class="detail $cell_id"/>
+  <path d="m56,41 -9,7" class="detail $cell_id"/>
+  <path d="m54,30 -5,-1 2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M47,24 V12 M47,48 V60" class="$cell_id"/>
+  <!-- shared base wire -->
+  <path d="M8,36 H62" class="$cell_id"/>
+  <!-- shared emitter wire top -->
+  <path d="M23,12 H47 M35,12 V0" class="$cell_id"/>
+  <g s:x="23" s:y="60" s:pid="IN" s:position="bottom"/>
+  <g s:x="47" s:y="60" s:pid="OUT" s:position="bottom"/>
+  <g s:x="35" s:y="0" s:pid="RAIL" s:position="top"/>
+</g>
+
+<!-- ==================== NMOS Current Mirror ==================== -->
+<g s:type="current_mirror_nmos" s:width="70" s:height="70" transform="translate(5,1050)">
+  <s:alias val="current_mirror_nmos"/>
+  <text x="35" y="-4" class="nodelabel $cell_id" s:attribute="ref">CM</text>
+  <text x="35" y="68" class="nodelabel $cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="70" height="70" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- MREF: NMOS left (gate-left) -->
+  <path d="M8,30 H12" class="detail $cell_id"/>
+  <path d="M14,16 V44" class="detail $cell_id"/>
+  <path d="M18,16 V24 M18,28 V32 M18,36 V44" class="detail $cell_id"/>
+  <path d="M18,20 H28 V6" class="$cell_id"/>
+  <path d="M18,40 H28 V56" class="$cell_id"/>
+  <path d="M18,30 H28" class="detail $cell_id"/>
+  <path d="m22,27 6,3 -6,3 z" style="fill:#000" class="$cell_id"/>
+  <!-- diode: D→G -->
+  <path d="M28,6 H8 V30" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <!-- MMIR: NMOS right (gate-right) -->
+  <path d="M62,30 H58" class="detail $cell_id"/>
+  <path d="M56,16 V44" class="detail $cell_id"/>
+  <path d="M52,16 V24 M52,28 V32 M52,36 V44" class="detail $cell_id"/>
+  <path d="M52,20 H42 V6" class="$cell_id"/>
+  <path d="M52,40 H42 V56" class="$cell_id"/>
+  <path d="M52,30 H42" class="detail $cell_id"/>
+  <path d="m48,27 -6,3 6,3 z" style="fill:#000" class="$cell_id"/>
+  <!-- shared gate wire -->
+  <path d="M8,30 H62" class="$cell_id"/>
+  <!-- drain extensions to ports -->
+  <path d="M28,6 V0" class="$cell_id"/>
+  <path d="M42,6 V0" class="$cell_id"/>
+  <!-- shared source -->
+  <path d="M28,56 H42 M35,56 V70" class="$cell_id"/>
+  <g s:x="28" s:y="0" s:pid="IN" s:position="top"/>
+  <g s:x="42" s:y="0" s:pid="OUT" s:position="top"/>
+  <g s:x="35" s:y="70" s:pid="RAIL" s:position="bottom"/>
+</g>
+
+<!-- ==================== PMOS Current Mirror ==================== -->
+<g s:type="current_mirror_pmos" s:width="70" s:height="70" transform="translate(90,1050)">
+  <s:alias val="current_mirror_pmos"/>
+  <text x="35" y="-4" class="nodelabel $cell_id" s:attribute="ref">CM</text>
+  <text x="35" y="68" class="nodelabel $cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="70" height="70" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- MREF: PMOS left (gate-left) -->
+  <path d="M8,40 H12" class="detail $cell_id"/>
+  <circle cx="13" cy="40" r="2" class="symbol $cell_id"/>
+  <path d="M15,26 V54" class="detail $cell_id"/>
+  <path d="M19,26 V54" class="detail $cell_id"/>
+  <path d="M19,30 H28 V14" class="$cell_id"/>
+  <path d="M19,50 H28 V64" class="$cell_id"/>
+  <path d="M28,40 H19" class="detail $cell_id"/>
+  <path d="m24,37 -6,3 6,3 z" style="fill:#000" class="$cell_id"/>
+  <!-- diode: D→G -->
+  <path d="M28,64 H8 V40" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <!-- MMIR: PMOS right (gate-right) -->
+  <path d="M62,40 H58" class="detail $cell_id"/>
+  <circle cx="57" cy="40" r="2" class="symbol $cell_id"/>
+  <path d="M55,26 V54" class="detail $cell_id"/>
+  <path d="M51,26 V54" class="detail $cell_id"/>
+  <path d="M51,30 H42 V14" class="$cell_id"/>
+  <path d="M51,50 H42 V64" class="$cell_id"/>
+  <path d="M42,40 H51" class="detail $cell_id"/>
+  <path d="m46,37 6,3 -6,3 z" style="fill:#000" class="$cell_id"/>
+  <!-- shared gate wire -->
+  <path d="M8,40 H62" class="$cell_id"/>
+  <!-- drain extensions to ports -->
+  <path d="M28,64 V70" class="$cell_id"/>
+  <path d="M42,64 V70" class="$cell_id"/>
+  <!-- shared source top -->
+  <path d="M28,14 H42 M35,14 V0" class="$cell_id"/>
+  <g s:x="28" s:y="70" s:pid="IN" s:position="bottom"/>
+  <g s:x="42" s:y="70" s:pid="OUT" s:position="bottom"/>
+  <g s:x="35" s:y="0" s:pid="RAIL" s:position="top"/>
+</g>
+
+<!-- ==================== NPN Cross-Coupled Pair ==================== -->
+<!--  Two NPN with B1=C2, B2=C1 (latch topology)
+      Cross wires drawn as an X inside the block  -->
+<g s:type="cross_coupled_npn" s:width="80" s:height="70" transform="translate(5,1140)">
+  <s:alias val="cross_coupled_npn"/>
+  <s:alias val="cross_coupled_nmos"/>
+  <text x="40" y="-4" class="nodelabel $cell_id" s:attribute="ref">XC</text>
+  <text x="40" y="68" class="nodelabel $cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="80" height="70" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- Q1: NPN left -->
+  <circle r="12" cx="20" cy="28" class="symbol $cell_id"/>
+  <path d="M8,28 H14 M14,20 V36" class="detail $cell_id"/>
+  <path d="m14,23 9,-7" class="detail $cell_id"/>
+  <path d="m14,33 9,7" class="detail $cell_id"/>
+  <path d="m23,40 -5,-1 2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M23,16 V0 M23,40 V54" class="$cell_id"/>
+  <!-- Q2: NPN right (mirrored) -->
+  <circle r="12" cx="60" cy="28" class="symbol $cell_id"/>
+  <path d="M72,28 H66 M66,20 V36" class="detail $cell_id"/>
+  <path d="m66,23 -9,-7" class="detail $cell_id"/>
+  <path d="m66,33 -9,7" class="detail $cell_id"/>
+  <path d="m57,40 5,-1 -2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M57,16 V0 M57,40 V54" class="$cell_id"/>
+  <!-- cross-coupling wires: B1←C2, B2←C1 -->
+  <path d="M8,28 L57,16" class="$cell_id" style="stroke:red;stroke-width:1.5"/>
+  <path d="M72,28 L23,16" class="$cell_id" style="stroke:red;stroke-width:1.5"/>
+  <!-- shared emitter -->
+  <path d="M23,54 H57 M40,54 V70" class="$cell_id"/>
+  <g s:x="23" s:y="0" s:pid="OUTP" s:position="top"/>
+  <g s:x="57" s:y="0" s:pid="OUTN" s:position="top"/>
+  <g s:x="40" s:y="70" s:pid="TAIL" s:position="bottom"/>
+</g>
+
+<!-- ==================== NPN Cascode ==================== -->
+<!--    OUT              Q_HI on top, Q_LO on bottom
+         |               Q_LO.C = Q_HI.E (internal)
+       [Q_HI] ← BIAS    Q_LO.B = IN, Q_HI.B = BIAS
+         |
+       [Q_LO] ← IN
+         |
+        RAIL             -->
+<g s:type="cascode_npn" s:width="50" s:height="80" transform="translate(5,1230)">
+  <s:alias val="cascode_npn"/>
+  <text x="30" y="-4" class="nodelabel $cell_id" s:attribute="ref">CAS</text>
+  <text x="38" y="40" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="50" height="80" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- Q_HI: NPN top -->
+  <circle r="12" cx="24" cy="20" class="symbol $cell_id"/>
+  <path d="M12,20 H18 M18,12 V28" class="detail $cell_id"/>
+  <path d="m18,15 9,-7" class="detail $cell_id"/>
+  <path d="m18,25 9,7" class="detail $cell_id"/>
+  <path d="m27,32 -5,-1 2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M27,8 V0 M27,32 V40" class="$cell_id"/>
+  <!-- BIAS lead out to left -->
+  <path d="M12,20 H0" class="$cell_id"/>
+  <!-- Q_LO: NPN bottom -->
+  <circle r="12" cx="24" cy="56" class="symbol $cell_id"/>
+  <path d="M12,56 H18 M18,48 V64" class="detail $cell_id"/>
+  <path d="m18,51 9,-7" class="detail $cell_id"/>
+  <path d="m18,61 9,7" class="detail $cell_id"/>
+  <path d="m27,68 -5,-1 2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M27,44 V40 M27,68 V80" class="$cell_id"/>
+  <!-- IN lead out to left -->
+  <path d="M12,56 H0" class="$cell_id"/>
+  <g s:x="27" s:y="0" s:pid="OUT" s:position="top"/>
+  <g s:x="0" s:y="56" s:pid="IN" s:position="left"/>
+  <g s:x="0" s:y="20" s:pid="BIAS" s:position="left"/>
+  <g s:x="27" s:y="80" s:pid="RAIL" s:position="bottom"/>
+</g>
+
+<!-- ==================== PNP Cascode ==================== -->
+<g s:type="cascode_pnp" s:width="50" s:height="80" transform="translate(60,1230)">
+  <s:alias val="cascode_pnp"/>
+  <text x="30" y="-4" class="nodelabel $cell_id" s:attribute="ref">CAS</text>
+  <text x="38" y="40" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="50" height="80" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- Q_HI: PNP bottom (collector down = output) -->
+  <circle r="12" cx="24" cy="56" class="symbol $cell_id"/>
+  <path d="M12,56 H18 M18,48 V64" class="detail $cell_id"/>
+  <path d="m18,51 9,-7" class="detail $cell_id"/>
+  <path d="m18,61 9,7" class="detail $cell_id"/>
+  <path d="m20,50 5,-1 -2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M27,44 V40 M27,68 V80" class="$cell_id"/>
+  <path d="M12,56 H0" class="$cell_id"/>
+  <!-- Q_LO: PNP top -->
+  <circle r="12" cx="24" cy="20" class="symbol $cell_id"/>
+  <path d="M12,20 H18 M18,12 V28" class="detail $cell_id"/>
+  <path d="m18,15 9,-7" class="detail $cell_id"/>
+  <path d="m18,25 9,7" class="detail $cell_id"/>
+  <path d="m20,14 5,-1 -2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M27,8 V0 M27,32 V40" class="$cell_id"/>
+  <path d="M12,20 H0" class="$cell_id"/>
+  <g s:x="27" s:y="80" s:pid="OUT" s:position="bottom"/>
+  <g s:x="0" s:y="20" s:pid="IN" s:position="left"/>
+  <g s:x="0" s:y="56" s:pid="BIAS" s:position="left"/>
+  <g s:x="27" s:y="0" s:pid="RAIL" s:position="top"/>
+</g>
+
+<!-- ==================== NMOS Cascode ==================== -->
+<g s:type="cascode_nmos" s:width="50" s:height="90" transform="translate(115,1230)">
+  <s:alias val="cascode_nmos"/>
+  <text x="30" y="-4" class="nodelabel $cell_id" s:attribute="ref">CAS</text>
+  <text x="40" y="45" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="50" height="90" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- M_HI: NMOS top -->
+  <path d="M8,20 H14" class="detail $cell_id"/>
+  <path d="M16,10 V30" class="detail $cell_id"/>
+  <path d="M20,10 V16 M20,19 V22 M20,25 V30" class="detail $cell_id"/>
+  <path d="M20,13 H30 V4" class="$cell_id"/>
+  <path d="M20,27 H30 V38" class="$cell_id"/>
+  <path d="M20,20 H30" class="detail $cell_id"/>
+  <path d="m24,17 6,3 -6,3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M8,20 H0" class="$cell_id"/>
+  <path d="M30,4 V0" class="$cell_id"/>
+  <!-- M_LO: NMOS bottom -->
+  <path d="M8,64 H14" class="detail $cell_id"/>
+  <path d="M16,54 V74" class="detail $cell_id"/>
+  <path d="M20,54 V60 M20,63 V66 M20,69 V74" class="detail $cell_id"/>
+  <path d="M20,57 H30 V42" class="$cell_id"/>
+  <path d="M20,71 H30 V86" class="$cell_id"/>
+  <path d="M20,64 H30" class="detail $cell_id"/>
+  <path d="m24,61 6,3 -6,3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M8,64 H0" class="$cell_id"/>
+  <!-- internal: M_LO.D(42) → M_HI.S(38) joined -->
+  <path d="M30,38 V42" class="$cell_id"/>
+  <path d="M30,86 V90" class="$cell_id"/>
+  <g s:x="30" s:y="0" s:pid="OUT" s:position="top"/>
+  <g s:x="0" s:y="64" s:pid="IN" s:position="left"/>
+  <g s:x="0" s:y="20" s:pid="BIAS" s:position="left"/>
+  <g s:x="30" s:y="90" s:pid="RAIL" s:position="bottom"/>
+</g>
+
+<!-- ==================== PMOS Cascode ==================== -->
+<g s:type="cascode_pmos" s:width="50" s:height="90" transform="translate(170,1230)">
+  <s:alias val="cascode_pmos"/>
+  <text x="30" y="-4" class="nodelabel $cell_id" s:attribute="ref">CAS</text>
+  <text x="40" y="45" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="50" height="90" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- M_LO: PMOS top -->
+  <path d="M8,20 H12" class="detail $cell_id"/>
+  <circle cx="13" cy="20" r="2" class="symbol $cell_id"/>
+  <path d="M15,10 V30" class="detail $cell_id"/>
+  <path d="M19,10 V30" class="detail $cell_id"/>
+  <path d="M19,13 H30 V4" class="$cell_id"/>
+  <path d="M19,27 H30 V38" class="$cell_id"/>
+  <path d="M30,20 H19" class="detail $cell_id"/>
+  <path d="m25,17 -6,3 6,3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M8,20 H0" class="$cell_id"/>
+  <path d="M30,4 V0" class="$cell_id"/>
+  <!-- M_HI: PMOS bottom -->
+  <path d="M8,64 H12" class="detail $cell_id"/>
+  <circle cx="13" cy="64" r="2" class="symbol $cell_id"/>
+  <path d="M15,54 V74" class="detail $cell_id"/>
+  <path d="M19,54 V74" class="detail $cell_id"/>
+  <path d="M19,57 H30 V42" class="$cell_id"/>
+  <path d="M19,71 H30 V86" class="$cell_id"/>
+  <path d="M30,64 H19" class="detail $cell_id"/>
+  <path d="m25,61 -6,3 6,3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M8,64 H0" class="$cell_id"/>
+  <path d="M30,38 V42" class="$cell_id"/>
+  <path d="M30,86 V90" class="$cell_id"/>
+  <g s:x="30" s:y="90" s:pid="OUT" s:position="bottom"/>
+  <g s:x="0" s:y="20" s:pid="IN" s:position="left"/>
+  <g s:x="0" s:y="64" s:pid="BIAS" s:position="left"/>
+  <g s:x="30" s:y="0" s:pid="RAIL" s:position="top"/>
+</g>
+
+<!-- ==================== NPN Darlington ==================== -->
+<!--      C (shared)     Q1.E→Q2.B, Q1.C=Q2.C
+          |
+        [Q1] ← IN
+          |E
+        [Q2]
+          |E
+         OUT             -->
+<g s:type="darlington_npn" s:width="50" s:height="80" transform="translate(5,1340)">
+  <s:alias val="darlington_npn"/>
+  <text x="30" y="-4" class="nodelabel $cell_id" s:attribute="ref">DRL</text>
+  <text x="38" y="40" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="50" height="80" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- Q1: NPN top -->
+  <circle r="12" cx="24" cy="20" class="symbol $cell_id"/>
+  <path d="M12,20 H18 M18,12 V28" class="detail $cell_id"/>
+  <path d="m18,15 9,-7" class="detail $cell_id"/>
+  <path d="m18,25 9,7" class="detail $cell_id"/>
+  <path d="m27,32 -5,-1 2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M27,8 V0 M27,32 V38" class="$cell_id"/>
+  <path d="M12,20 H0" class="$cell_id"/>
+  <!-- Q2: NPN bottom, B fed from Q1.E internal -->
+  <circle r="12" cx="24" cy="56" class="symbol $cell_id"/>
+  <path d="M12,56 H18 M18,48 V64" class="detail $cell_id"/>
+  <path d="m18,51 9,-7" class="detail $cell_id"/>
+  <path d="m18,61 9,7" class="detail $cell_id"/>
+  <path d="m27,68 -5,-1 2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M27,68 V80" class="$cell_id"/>
+  <!-- Q1.E → Q2.B internal link -->
+  <path d="M27,38 V40 H12 V56" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <!-- Q2.C → shared C (goes to top, same as Q1.C) -->
+  <path d="M27,44 H38 V8 H27" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <g s:x="27" s:y="0" s:pid="C" s:position="top"/>
+  <g s:x="0" s:y="20" s:pid="IN" s:position="left"/>
+  <g s:x="27" s:y="80" s:pid="OUT" s:position="bottom"/>
+</g>
+
+<!-- ==================== PNP Darlington ==================== -->
+<g s:type="darlington_pnp" s:width="50" s:height="80" transform="translate(60,1340)">
+  <s:alias val="darlington_pnp"/>
+  <text x="30" y="-4" class="nodelabel $cell_id" s:attribute="ref">DRL</text>
+  <text x="38" y="40" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="50" height="80" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- Q1: PNP top -->
+  <circle r="12" cx="24" cy="20" class="symbol $cell_id"/>
+  <path d="M12,20 H18 M18,12 V28" class="detail $cell_id"/>
+  <path d="m18,15 9,-7" class="detail $cell_id"/>
+  <path d="m18,25 9,7" class="detail $cell_id"/>
+  <path d="m20,14 5,-1 -2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M27,8 V0 M27,32 V38" class="$cell_id"/>
+  <path d="M12,20 H0" class="$cell_id"/>
+  <!-- Q2: PNP bottom -->
+  <circle r="12" cx="24" cy="56" class="symbol $cell_id"/>
+  <path d="M12,56 H18 M18,48 V64" class="detail $cell_id"/>
+  <path d="m18,51 9,-7" class="detail $cell_id"/>
+  <path d="m18,61 9,7" class="detail $cell_id"/>
+  <path d="m20,50 5,-1 -2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M27,68 V80" class="$cell_id"/>
+  <path d="M27,38 V40 H12 V56" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <path d="M27,44 H38 V68 H27" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <g s:x="27" s:y="80" s:pid="C" s:position="bottom"/>
+  <g s:x="0" s:y="20" s:pid="IN" s:position="left"/>
+  <g s:x="27" s:y="0" s:pid="OUT" s:position="top"/>
+</g>
+
+<!-- ==================== Sziklai (Complementary Darlington) ==================== -->
+<!--  NPN.E→PNP.B, NPN.C=PNP.E  -->
+<g s:type="sziklai_pair" s:width="50" s:height="80" transform="translate(115,1340)">
+  <s:alias val="sziklai_pair"/>
+  <text x="30" y="-4" class="nodelabel $cell_id" s:attribute="ref">SZK</text>
+  <text x="38" y="40" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="50" height="80" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- Q_NPN: top -->
+  <circle r="12" cx="24" cy="20" class="symbol $cell_id"/>
+  <path d="M12,20 H18 M18,12 V28" class="detail $cell_id"/>
+  <path d="m18,15 9,-7" class="detail $cell_id"/>
+  <path d="m18,25 9,7" class="detail $cell_id"/>
+  <path d="m27,32 -5,-1 2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M27,8 V0 M27,32 V38" class="$cell_id"/>
+  <path d="M12,20 H0" class="$cell_id"/>
+  <!-- Q_PNP: bottom -->
+  <circle r="12" cx="24" cy="56" class="symbol $cell_id"/>
+  <path d="M12,56 H18 M18,48 V64" class="detail $cell_id"/>
+  <path d="m18,51 9,-7" class="detail $cell_id"/>
+  <path d="m18,61 9,7" class="detail $cell_id"/>
+  <path d="m20,50 5,-1 -2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M27,68 V80" class="$cell_id"/>
+  <!-- NPN.E→PNP.B -->
+  <path d="M27,38 V40 H12 V56" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <!-- NPN.C=PNP.E shared at top -->
+  <path d="M27,44 H38 V8 H27" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <g s:x="27" s:y="0" s:pid="C" s:position="top"/>
+  <g s:x="0" s:y="20" s:pid="IN" s:position="left"/>
+  <g s:x="27" s:y="80" s:pid="OUT" s:position="bottom"/>
+</g>
+
+<!-- ==================== Vbe Multiplier ==================== -->
+<!--  TOP──┬──R1──┬──R2──┬──BOT
+           |      |      |
+          Q.C    Q.B    Q.E
+  Drawn: Q in center, R1 top-right, R2 bottom-right  -->
+<g s:type="vbe_multiplier" s:width="50" s:height="80" transform="translate(5,1440)">
+  <s:alias val="vbe_multiplier"/>
+  <text x="30" y="-4" class="nodelabel $cell_id" s:attribute="ref">VBE</text>
+  <text x="38" y="40" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="50" height="80" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- NPN Q in center -->
+  <circle r="12" cx="16" cy="40" class="symbol $cell_id"/>
+  <path d="M4,40 H10 M10,32 V48" class="detail $cell_id"/>
+  <path d="m10,35 9,-7" class="detail $cell_id"/>
+  <path d="m10,45 9,7" class="detail $cell_id"/>
+  <path d="m19,52 -5,-1 2,-4 z" style="fill:#000" class="$cell_id"/>
+  <!-- Q.C wire up -->
+  <path d="M19,28 V8 H25 V0" class="$cell_id"/>
+  <!-- Q.E wire down -->
+  <path d="M19,52 V72 H25 V80" class="$cell_id"/>
+  <!-- R1: TOP↔Q.B (at right, top half) -->
+  <rect x="32" y="14" width="8" height="22" class="symbol $cell_id"/>
+  <text x="44" y="28" style="font-size:6px" class="$cell_id">R1</text>
+  <path d="M36,0 V14 M36,36 V40" class="$cell_id"/>
+  <!-- R2: Q.B↔BOT (at right, bottom half) -->
+  <rect x="32" y="44" width="8" height="22" class="symbol $cell_id"/>
+  <text x="44" y="58" style="font-size:6px" class="$cell_id">R2</text>
+  <path d="M36,40 V44 M36,66 V80" class="$cell_id"/>
+  <!-- Q.B → R junction -->
+  <path d="M4,40 H36" class="$cell_id"/>
+  <!-- TOP/BOT convergence -->
+  <path d="M25,0 H36 M25,80 H36" class="$cell_id"/>
+  <g s:x="25" s:y="0" s:pid="TOP" s:position="top"/>
+  <g s:x="25" s:y="80" s:pid="BOT" s:position="bottom"/>
+</g>
+
+<!-- ==================== BJT Push-Pull ==================== -->
+<!--   NPN on top (C→VCC, E→OUT_HI)
+       PNP on bottom (C→VEE/GND, E→OUT_LO)
+       Bases driven separately  -->
+<g s:type="push_pull_bjt" s:width="50" s:height="80" transform="translate(60,1440)">
+  <s:alias val="push_pull_bjt"/>
+  <text x="30" y="-4" class="nodelabel $cell_id" s:attribute="ref">PP</text>
+  <text x="38" y="40" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="50" height="80" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- Q_N: NPN top -->
+  <circle r="12" cx="26" cy="20" class="symbol $cell_id"/>
+  <path d="M14,20 H20 M20,12 V28" class="detail $cell_id"/>
+  <path d="m20,15 9,-7" class="detail $cell_id"/>
+  <path d="m20,25 9,7" class="detail $cell_id"/>
+  <path d="m29,32 -5,-1 2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M14,20 H0" class="$cell_id"/>
+  <path d="M29,32 H50" class="$cell_id"/>
+  <!-- Q_P: PNP bottom -->
+  <circle r="12" cx="26" cy="60" class="symbol $cell_id"/>
+  <path d="M14,60 H20 M20,52 V68" class="detail $cell_id"/>
+  <path d="m20,55 9,-7" class="detail $cell_id"/>
+  <path d="m20,65 9,7" class="detail $cell_id"/>
+  <path d="m22,54 5,-1 -2,-4 z" style="fill:#000" class="$cell_id"/>
+  <path d="M14,60 H0" class="$cell_id"/>
+  <path d="M29,48 H50" class="$cell_id"/>
+  <!-- NPN.C → VCC -->
+  <path d="M29,8 V0" class="$cell_id"/>
+  <!-- PNP.C → VEE -->
+  <path d="M29,72 V80" class="$cell_id"/>
+  <g s:x="0" s:y="20" s:pid="IN_HI" s:position="left"/>
+  <g s:x="0" s:y="60" s:pid="IN_LO" s:position="left"/>
+  <g s:x="50" s:y="32" s:pid="OUT_HI" s:position="right"/>
+  <g s:x="50" s:y="48" s:pid="OUT_LO" s:position="right"/>
+  <g s:x="29" s:y="0" s:pid="SUPPLY_HI" s:position="top"/>
+  <g s:x="29" s:y="80" s:pid="SUPPLY_LO" s:position="bottom"/>
+</g>
+
+<!-- ==================== MOS Push-Pull ==================== -->
+<g s:type="push_pull_mos" s:width="50" s:height="80" transform="translate(115,1440)">
+  <s:alias val="push_pull_mos"/>
+  <text x="30" y="-4" class="nodelabel $cell_id" s:attribute="ref">PP</text>
+  <text x="38" y="40" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="50" height="80" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- M_N: NMOS top half -->
+  <path d="M8,20 H14" class="detail $cell_id"/>
+  <path d="M16,10 V30" class="detail $cell_id"/>
+  <path d="M20,10 V16 M20,19 V22 M20,25 V30" class="detail $cell_id"/>
+  <path d="M20,20 H30" class="detail $cell_id"/>
+  <path d="m24,17 6,3 -6,3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M20,14 H30" class="$cell_id"/>
+  <path d="M20,26 H30 V38" class="$cell_id"/>
+  <path d="M8,20 H0 M30,38 H50" class="$cell_id"/>
+  <!-- M_P: PMOS bottom half -->
+  <path d="M8,60 H12" class="detail $cell_id"/>
+  <circle cx="13" cy="60" r="2" class="symbol $cell_id"/>
+  <path d="M15,50 V70" class="detail $cell_id"/>
+  <path d="M19,50 V70" class="detail $cell_id"/>
+  <path d="M19,60 H30" class="detail $cell_id"/>
+  <path d="m25,57 -6,3 6,3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M19,54 H30 V42" class="$cell_id"/>
+  <path d="M19,66 H30" class="$cell_id"/>
+  <path d="M8,60 H0 M30,42 H50" class="$cell_id"/>
+  <!-- NMOS.D → VDD -->
+  <path d="M30,14 V0" class="$cell_id"/>
+  <!-- PMOS.D → VSS -->
+  <path d="M30,66 V80" class="$cell_id"/>
+  <g s:x="0" s:y="20" s:pid="IN_HI" s:position="left"/>
+  <g s:x="0" s:y="60" s:pid="IN_LO" s:position="left"/>
+  <g s:x="50" s:y="38" s:pid="OUT_HI" s:position="right"/>
+  <g s:x="50" s:y="42" s:pid="OUT_LO" s:position="right"/>
+  <g s:x="30" s:y="0" s:pid="SUPPLY_HI" s:position="top"/>
+  <g s:x="30" s:y="80" s:pid="SUPPLY_LO" s:position="bottom"/>
+</g>
+
+<!-- ==================== NPN Wilson Current Mirror ==================== -->
+<!--  3 NPN: Q1 diode + Q2 mirror + Q3 feedback
+      Q1.B=Q1.C, Q1.B=Q2.B, Q3.E=Q2.C, Q3.B=Q1.C  -->
+<g s:type="wilson_mirror_npn" s:width="80" s:height="90" transform="translate(5,1540)">
+  <s:alias val="wilson_mirror_npn"/>
+  <text x="40" y="-4" class="nodelabel $cell_id" s:attribute="ref">WM</text>
+  <text x="50" y="45" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="80" height="90" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- Q1: NPN diode (left-bottom) -->
+  <circle r="10" cx="18" cy="60" class="symbol $cell_id"/>
+  <path d="M8,60 H12 M12,54 V66" class="detail $cell_id"/>
+  <path d="m12,56 8,-6" class="detail $cell_id"/>
+  <path d="m12,64 8,6" class="detail $cell_id"/>
+  <path d="m20,70 -4,-1 2,-3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M20,54 V42 M20,70 V82" class="$cell_id"/>
+  <!-- Q1 diode: C→B -->
+  <path d="M20,42 H8 V60" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <!-- Q2: NPN mirror (right-bottom) -->
+  <circle r="10" cx="62" cy="60" class="symbol $cell_id"/>
+  <path d="M72,60 H68 M68,54 V66" class="detail $cell_id"/>
+  <path d="m68,56 -8,-6" class="detail $cell_id"/>
+  <path d="m68,64 -8,6" class="detail $cell_id"/>
+  <path d="m60,70 4,-1 -2,-3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M60,54 V42 M60,70 V82" class="$cell_id"/>
+  <!-- shared B wire -->
+  <path d="M8,60 H72" class="$cell_id"/>
+  <!-- shared E wire -->
+  <path d="M20,82 H60 M40,82 V90" class="$cell_id"/>
+  <!-- Q3: NPN feedback (center-top), Q3.E=Q2.C, Q3.C=OUT -->
+  <circle r="10" cx="40" cy="22" class="symbol $cell_id"/>
+  <path d="M28,22 H34 M34,16 V28" class="detail $cell_id"/>
+  <path d="m34,18 8,-6" class="detail $cell_id"/>
+  <path d="m34,26 8,6" class="detail $cell_id"/>
+  <path d="m42,32 -4,-1 2,-3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M42,12 V0 M42,32 V42" class="$cell_id"/>
+  <!-- Q3.E → Q2.C (=IN node), Q3.B → Q1.C -->
+  <path d="M42,42 H60 V42" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <path d="M28,22 H20 V42" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <!-- IN at Q2.C=Q3.E junction -->
+  <path d="M60,42 V0" class="$cell_id"/>
+  <g s:x="60" s:y="0" s:pid="IN" s:position="top"/>
+  <g s:x="42" s:y="0" s:pid="OUT" s:position="top"/>
+  <g s:x="40" s:y="90" s:pid="RAIL" s:position="bottom"/>
+</g>
+
+<!-- ==================== NPN Diff Pair + PNP Active Load ==================== -->
+<!--  VCC
+      |  |
+    [QML][QMR]   PNP mirror load (QML diode)
+      |    |
+    [QL] [QR]    NPN diff pair
+      \ /
+      TAIL       OUT = QR.C = QMR.C  -->
+<g s:type="diff_pair_active_load_npn" s:width="90" s:height="100" transform="translate(5,1650)">
+  <s:alias val="diff_pair_active_load_npn"/>
+  <text x="50" y="-4" class="nodelabel $cell_id" s:attribute="ref">DPA</text>
+  <text x="78" y="50" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="90" height="100" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- QML: PNP load left (diode, base-left) at (10,8) -->
+  <circle r="10" cx="24" cy="18" class="symbol $cell_id"/>
+  <path d="M14,18 H18 M18,12 V24" class="detail $cell_id"/>
+  <path d="m18,14 8,-6" class="detail $cell_id"/>
+  <path d="m18,22 8,6" class="detail $cell_id"/>
+  <path d="m20,13 4,-1 -2,-3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M26,8 V0 M26,28 V40" class="$cell_id"/>
+  <!-- QML diode link -->
+  <path d="M26,28 H14 V18" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <!-- QMR: PNP load right (mirrored) at (50,8) -->
+  <circle r="10" cx="64" cy="18" class="symbol $cell_id"/>
+  <path d="M74,18 H70 M70,12 V24" class="detail $cell_id"/>
+  <path d="m70,14 -8,-6" class="detail $cell_id"/>
+  <path d="m70,22 -8,6" class="detail $cell_id"/>
+  <path d="m68,13 -4,-1 2,-3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M62,8 V0 M62,28 V40" class="$cell_id"/>
+  <!-- PNP mirror shared base wire -->
+  <path d="M14,18 H74" class="$cell_id"/>
+  <!-- shared E (VCC) -->
+  <path d="M26,0 H62 M44,0 V0" class="$cell_id"/>
+  <!-- QL: NPN diff left at (10,48) -->
+  <circle r="10" cx="22" cy="58" class="symbol $cell_id"/>
+  <path d="M12,58 H16 M16,52 V64" class="detail $cell_id"/>
+  <path d="m16,54 8,-6" class="detail $cell_id"/>
+  <path d="m16,62 8,6" class="detail $cell_id"/>
+  <path d="m24,68 -4,-1 2,-3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M24,48 V40 H26 M24,68 V82" class="$cell_id"/>
+  <path d="M12,58 H0" class="$cell_id"/>
+  <!-- QR: NPN diff right (mirrored) at (50,48) -->
+  <circle r="10" cx="66" cy="58" class="symbol $cell_id"/>
+  <path d="M76,58 H72 M72,52 V64" class="detail $cell_id"/>
+  <path d="m72,54 -8,-6" class="detail $cell_id"/>
+  <path d="m72,62 -8,6" class="detail $cell_id"/>
+  <path d="m64,68 4,-1 -2,-3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M64,48 V40 H62 M64,68 V82" class="$cell_id"/>
+  <path d="M76,58 H90" class="$cell_id"/>
+  <!-- shared emitter (TAIL) -->
+  <path d="M24,82 H64 M44,82 V100" class="$cell_id"/>
+  <!-- OUT at QR.C / QMR.C junction → right -->
+  <path d="M62,40 H90" class="$cell_id"/>
+  <!-- MIRR: mirror reference node (QL.C=QML.C) → left -->
+  <path d="M0,40 H26" class="$cell_id"/>
+  <g s:x="44" s:y="0" s:pid="VCC" s:position="top"/>
+  <g s:x="0" s:y="58" s:pid="INP" s:position="left"/>
+  <g s:x="90" s:y="58" s:pid="INN" s:position="right"/>
+  <g s:x="90" s:y="40" s:pid="OUT" s:position="right"/>
+  <g s:x="44" s:y="100" s:pid="TAIL" s:position="bottom"/>
+  <g s:x="0" s:y="40" s:pid="MIRR" s:position="left"/>
+</g>
+
+<!-- ==================== PNP Diff Pair + NPN Active Load ==================== -->
+<g s:type="diff_pair_active_load_pnp" s:width="90" s:height="100" transform="translate(110,1650)">
+  <s:alias val="diff_pair_active_load_pnp"/>
+  <text x="50" y="-4" class="nodelabel $cell_id" s:attribute="ref">DPA</text>
+  <text x="78" y="50" class="$cell_id" style="font-size:7px" s:attribute="value">val</text>
+  <rect x="0" y="0" width="90" height="100" rx="4" ry="4" class="symbol $cell_id" style="stroke-dasharray:4,2;stroke-width:1"/>
+  <!-- QL: PNP diff left at (10,8) -->
+  <circle r="10" cx="22" cy="38" class="symbol $cell_id"/>
+  <path d="M12,38 H16 M16,32 V44" class="detail $cell_id"/>
+  <path d="m16,34 8,-6" class="detail $cell_id"/>
+  <path d="m16,42 8,6" class="detail $cell_id"/>
+  <path d="m18,33 4,-1 -2,-3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M24,28 V18 M24,48 V56" class="$cell_id"/>
+  <path d="M12,38 H0" class="$cell_id"/>
+  <!-- QR: PNP diff right -->
+  <circle r="10" cx="66" cy="38" class="symbol $cell_id"/>
+  <path d="M76,38 H72 M72,32 V44" class="detail $cell_id"/>
+  <path d="m72,34 -8,-6" class="detail $cell_id"/>
+  <path d="m72,42 -8,6" class="detail $cell_id"/>
+  <path d="m70,33 -4,-1 2,-3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M64,28 V18 M64,48 V56" class="$cell_id"/>
+  <path d="M76,38 H90" class="$cell_id"/>
+  <!-- shared E (TAIL→top) -->
+  <path d="M24,18 H64 M44,18 V0" class="$cell_id"/>
+  <!-- QML: NPN load left (diode) at (10,64) -->
+  <circle r="10" cx="24" cy="74" class="symbol $cell_id"/>
+  <path d="M14,74 H18 M18,68 V80" class="detail $cell_id"/>
+  <path d="m18,70 8,-6" class="detail $cell_id"/>
+  <path d="m18,78 8,6" class="detail $cell_id"/>
+  <path d="m26,84 -4,-1 2,-3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M26,64 V56 H24 M26,84 V92" class="$cell_id"/>
+  <path d="M26,64 H14 V74" class="$cell_id" style="stroke-dasharray:2,2"/>
+  <!-- QMR: NPN load right -->
+  <circle r="10" cx="64" cy="74" class="symbol $cell_id"/>
+  <path d="M74,74 H70 M70,68 V80" class="detail $cell_id"/>
+  <path d="m70,70 -8,-6" class="detail $cell_id"/>
+  <path d="m70,78 -8,6" class="detail $cell_id"/>
+  <path d="m62,84 4,-1 -2,-3 z" style="fill:#000" class="$cell_id"/>
+  <path d="M62,64 V56 H64 M62,84 V92" class="$cell_id"/>
+  <!-- NPN mirror shared base wire -->
+  <path d="M14,74 H74" class="$cell_id"/>
+  <!-- shared E (VSS→bottom) -->
+  <path d="M26,92 H62 M44,92 V100" class="$cell_id"/>
+  <!-- OUT at QR.C / QMR.C junction → right -->
+  <path d="M64,56 H90" class="$cell_id"/>
+  <!-- MIRR: mirror reference node (QL.C=QML.C) → left -->
+  <path d="M0,56 H24" class="$cell_id"/>
+  <g s:x="44" s:y="0" s:pid="TAIL" s:position="top"/>
+  <g s:x="0" s:y="38" s:pid="INP" s:position="left"/>
+  <g s:x="90" s:y="38" s:pid="INN" s:position="right"/>
+  <g s:x="90" s:y="56" s:pid="OUT" s:position="right"/>
+  <g s:x="44" s:y="100" s:pid="VSS" s:position="bottom"/>
+  <g s:x="0" s:y="56" s:pid="MIRR" s:position="left"/>
+</g>
+
 </svg>

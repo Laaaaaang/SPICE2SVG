@@ -2,10 +2,42 @@
   "modules": {
     "": {
       "cells": {
-        "gnd_1": {
-          "type": "gnd",
+        "DP_1": {
+          "type": "diff_pair_nmos",
+          "attributes": {
+            "ref": "DP_1",
+            "value": "NMOS 差分对",
+            "components": "M1,M2"
+          },
+          "connections": {
+            "INP": [
+              2
+            ],
+            "INN": [
+              3
+            ],
+            "OUTP": [
+              5
+            ],
+            "OUTN": [
+              6
+            ],
+            "TAIL": [
+              4
+            ]
+          },
           "port_directions": {
-            "A": "input"
+            "INP": "input",
+            "INN": "input",
+            "OUTP": "output",
+            "OUTN": "output",
+            "TAIL": "output"
+          }
+        },
+        "vcc_1": {
+          "type": "vcc",
+          "port_directions": {
+            "A": "output"
           },
           "connections": {
             "A": [
@@ -13,26 +45,31 @@
             ]
           },
           "attributes": {
-            "name": "GND"
+            "name": "VDD"
           }
         },
-        "VINP": {
-          "type": "v",
+        "CM_1": {
+          "type": "current_mirror_pmos",
           "attributes": {
-            "value": "0.9",
-            "ref": "VINP"
+            "ref": "CM_1",
+            "value": "PMOS 电流镜",
+            "components": "M3,M4"
           },
           "connections": {
-            "+": [
-              2
+            "IN": [
+              5
             ],
-            "-": [
+            "OUT": [
+              6
+            ],
+            "RAIL": [
               7
             ]
           },
           "port_directions": {
-            "+": "input",
-            "-": "output"
+            "IN": "input",
+            "OUT": "output",
+            "RAIL": "input"
           }
         },
         "gnd_2": {
@@ -49,15 +86,15 @@
             "name": "GND"
           }
         },
-        "VINN": {
+        "VINP": {
           "type": "v",
           "attributes": {
             "value": "0.9",
-            "ref": "VINN"
+            "ref": "VINP"
           },
           "connections": {
             "+": [
-              3
+              2
             ],
             "-": [
               8
@@ -82,6 +119,39 @@
             "name": "GND"
           }
         },
+        "VINN": {
+          "type": "v",
+          "attributes": {
+            "value": "0.9",
+            "ref": "VINN"
+          },
+          "connections": {
+            "+": [
+              3
+            ],
+            "-": [
+              9
+            ]
+          },
+          "port_directions": {
+            "+": "input",
+            "-": "output"
+          }
+        },
+        "gnd_4": {
+          "type": "gnd",
+          "port_directions": {
+            "A": "input"
+          },
+          "connections": {
+            "A": [
+              10
+            ]
+          },
+          "attributes": {
+            "name": "GND"
+          }
+        },
         "ITAIL": {
           "type": "i",
           "attributes": {
@@ -93,132 +163,12 @@
               4
             ],
             "-": [
-              9
+              10
             ]
           },
           "port_directions": {
             "+": "input",
             "-": "output"
-          }
-        },
-        "M1": {
-          "type": "nmos_ml",
-          "attributes": {
-            "value": "NMOS",
-            "ref": "M1"
-          },
-          "connections": {
-            "D": [
-              5
-            ],
-            "G": [
-              2
-            ],
-            "S": [
-              4
-            ]
-          },
-          "port_directions": {
-            "D": "input",
-            "G": "input",
-            "S": "output"
-          }
-        },
-        "M2": {
-          "type": "nmos_m",
-          "attributes": {
-            "value": "NMOS",
-            "ref": "M2"
-          },
-          "connections": {
-            "D": [
-              6
-            ],
-            "G": [
-              3
-            ],
-            "S": [
-              4
-            ]
-          },
-          "port_directions": {
-            "D": "input",
-            "G": "input",
-            "S": "output"
-          }
-        },
-        "vcc_4": {
-          "type": "vcc",
-          "port_directions": {
-            "A": "output"
-          },
-          "connections": {
-            "A": [
-              10
-            ]
-          },
-          "attributes": {
-            "name": "VDD"
-          }
-        },
-        "vcc_5": {
-          "type": "vcc",
-          "port_directions": {
-            "A": "output"
-          },
-          "connections": {
-            "A": [
-              11
-            ]
-          },
-          "attributes": {
-            "name": "VDD"
-          }
-        },
-        "M3": {
-          "type": "pmos_ml",
-          "attributes": {
-            "value": "PMOS",
-            "ref": "M3"
-          },
-          "connections": {
-            "D": [
-              5
-            ],
-            "G": [
-              5
-            ],
-            "S": [
-              10
-            ]
-          },
-          "port_directions": {
-            "D": "output",
-            "G": "output",
-            "S": "input"
-          }
-        },
-        "M4": {
-          "type": "pmos_m",
-          "attributes": {
-            "value": "PMOS",
-            "ref": "M4"
-          },
-          "connections": {
-            "D": [
-              6
-            ],
-            "G": [
-              5
-            ],
-            "S": [
-              11
-            ]
-          },
-          "port_directions": {
-            "D": "output",
-            "G": "output",
-            "S": "input"
           }
         }
       },
